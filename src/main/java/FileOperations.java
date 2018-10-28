@@ -6,8 +6,6 @@ package main.java;
  * Thread safe.
  */
 public class FileOperations {
-	private FileOperations instance;
-	
 	private static class SingletonHelper{
 		private static final FileOperations INSTANCE = new FileOperations();
 	}
@@ -17,15 +15,15 @@ public class FileOperations {
 	}
 	
 	public void createFolder(String path){
-		
+		// TODO Auto-generated method stub
 	}
 	
 	public void deleteFile(String path){
-		
+		// TODO Auto-generated method stub
 	}
 	
 	public void copyFile(String path, String destination){
-		
+		// TODO Auto-generated method stub
 	}
 	
 	public boolean compareHashes(String hash1, String hash2){

@@ -15,9 +15,15 @@ public abstract class Job {
 	Set<String> destinationPaths;
 	Calendar timing;
 	
-	/*
+	Job(Set<BackupFile> sourceFiles, Set<String> destinationPaths, Calendar timing){
+		this.sourceFiles = sourceFiles;
+		this.destinationPaths = destinationPaths;
+		this.timing = timing;
+	}
+	
+	/**
 	 * Copies all items in sourceFiles to all paths in destinationPaths.
-	 * Then, verifies that copy is complete and returns boolean result.
+	 * @return success
 	 */
 	public abstract boolean performJob();
 	
@@ -26,7 +32,7 @@ public abstract class Job {
 	public abstract void addFile(String file);
 	public abstract void removeFile(String file);
 	
-	/*
+	/**
 	 * Deletes job, empties both sets.
 	 */
 	public abstract void deleteJob();

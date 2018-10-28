@@ -1,6 +1,13 @@
 package main.java;
 
+import java.util.Calendar;
+import java.util.Set;
+
 public class InstantJob extends Job {
+	
+	InstantJob(Set<BackupFile> sourceFiles, Set<String> destinationPaths, Calendar timing){
+		super(sourceFiles, destinationPaths, timing);
+	}
 
 	@Override
 	public boolean performJob() {
