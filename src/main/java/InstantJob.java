@@ -1,18 +1,21 @@
 package main.java;
 
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Set;
 
 public class InstantJob extends Job {
 	
-	InstantJob(Set<BackupFile> sourceFiles, Set<String> destinationPaths, Calendar timing){
-		super(sourceFiles, destinationPaths, timing);
+	InstantJob(String sourceFiles, ArrayList<String> destinationPaths, Calendar timing, FileOperations fileoperations){
+		super(sourceFiles, destinationPaths, timing, fileoperations);
 	}
 
 	@Override
 	public boolean performJob() {
-		// TODO Auto-generated method stub
-		return false;
+		for(int i = 0; i < this.destinationPaths.size(); i++)
+		{
+			fileOperations.copyFile(sourceFiles, destinationPaths.get(i));
+		}
+		return true;
 	}
 	
 	private boolean verifyCompletion() {
@@ -22,27 +25,16 @@ public class InstantJob extends Job {
 
 	@Override
 	public void addDestination(String destination) {
-		// TODO Auto-generated method stub
+		this.destinationPaths.add(destination);
 		
 	}
 
 	@Override
 	public void removeDestination(String destination) {
-		// TODO Auto-generated method stub
+		this.destinationPaths.remove(destinationPaths.indexOf(destination));
 		
 	}
 
-	@Override
-	public void addFile(String file) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void removeFile(String file) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void deleteJob() {
