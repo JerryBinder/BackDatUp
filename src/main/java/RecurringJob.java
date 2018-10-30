@@ -16,8 +16,10 @@ public class RecurringJob extends Job {
 
 	@Override
 	public boolean performJob() {
-		fileOperations.copyFile(sourceFiles, destinationPaths.get(0));
-		destinationPaths.remove(0);
+		for(int i = 0; i < this.destinationPaths.size(); i++)
+		{
+			fileOperations.copyFile(sourceFiles, destinationPaths.get(i));
+		}
 		timesToRepeat--;
 		return true;
 	}
