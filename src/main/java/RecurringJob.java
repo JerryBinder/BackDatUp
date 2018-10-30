@@ -1,23 +1,25 @@
 package main.java;
 
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Set;
 
 public class RecurringJob extends Job {
 	int interval;		// number of sec/ms/whatever between each recurrance
 	int timesToRepeat;	// number of times job will recur
 	
-	RecurringJob(BackupFile sourceFiles, Set<String> destinationPaths, Calendar timing, int interval, int timesToRepeat){
-		super(sourceFiles, destinationPaths, timing);
+	RecurringJob(String sourceFiles, ArrayList<String> destinationPaths, Calendar timing, int interval, int timesToRepeat, FileOperations fileoperations){
+		super(sourceFiles, destinationPaths, timing, fileoperations);
 		this.interval = interval;
 		this.timesToRepeat = timesToRepeat;
+		this.fileOperations = fileoperations;
 	}
 
 	@Override
 	public boolean performJob() {
-		// TODO Auto-generated method stub
-		// TODO make sure to advance Calendar by the interval, then decrement timesToRepeat
-		return false;
+		fileOperations.copyFile(sourceFiles, destinationPaths.get(0));
+		destinationPaths.remove(0);
+		timesToRepeat--;
+		return true;
 	}
 	
 	private boolean verifyCompletion() {
@@ -27,14 +29,13 @@ public class RecurringJob extends Job {
 
 	@Override
 	public void addDestination(String destination) {
-		// TODO Auto-generated method stub
-		
+		this.destinationPaths.add(destination);
 	}
 
 	@Override
 	public void removeDestination(String destination) {
-		// TODO Auto-generated method stub
-		
+		this.destinationPaths.remove(destinationPaths.indexOf(destination));
+		timesToRepeat--;
 	}
 
 	@Override
