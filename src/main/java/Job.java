@@ -11,11 +11,11 @@ import java.util.Set;
  *
  */
 public abstract class Job {
-	Set<BackupFile> sourceFiles;
+	BackupFile sourceFiles;
 	Set<String> destinationPaths;
 	Calendar timing;
 	
-	Job(Set<BackupFile> sourceFiles, Set<String> destinationPaths, Calendar timing){
+	Job(BackupFile sourceFiles, Set<String> destinationPaths, Calendar timing){
 		this.sourceFiles = sourceFiles;
 		this.destinationPaths = destinationPaths;
 		this.timing = timing;
