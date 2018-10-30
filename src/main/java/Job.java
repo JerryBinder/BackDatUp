@@ -14,6 +14,7 @@ public abstract class Job {
 	BackupFile sourceFiles;
 	Set<String> destinationPaths;
 	Calendar timing;
+	private FileOperations fileOperations;
 	
 	Job(BackupFile sourceFiles, Set<String> destinationPaths, Calendar timing){
 		this.sourceFiles = sourceFiles;
