@@ -1,25 +1,25 @@
 /**
  * 
  */
-package main.java;
 
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Set;
 
 /**
- * @author Jerry Binder
+ * @author Jerry Binder, Dustin Jackson
  *
  */
 public abstract class Job {
-	BackupFile sourceFiles;
-	Set<String> destinationPaths;
+	String sourceFiles;
+	ArrayList<String> destinationPaths;
 	Calendar timing;
-	private FileOperations fileOperations;
+	FileOperations fileOperations;
 	
-	Job(BackupFile sourceFiles, Set<String> destinationPaths, Calendar timing){
-		this.sourceFiles = sourceFiles;
+	Job(String sourceFiles2, ArrayList<String> destinationPaths, Calendar timing, FileOperations fileoperations){
+		this.sourceFiles = sourceFiles2;
 		this.destinationPaths = destinationPaths;
 		this.timing = timing;
+		this.fileOperations = fileoperations;
 	}
 	
 	/**
@@ -38,3 +38,4 @@ public abstract class Job {
 	 */
 	public abstract void deleteJob();
 }
+
