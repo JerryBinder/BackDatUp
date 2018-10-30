@@ -1,7 +1,12 @@
 package main.java;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 /**
- * @author Jerry Binder
+ * @author Jerry Binder, Dustin Jackson
  * Uses Bill Pugh Singleton to provide access to a single instance of FileOperations.
  * Thread safe.
  */
@@ -14,16 +19,28 @@ public class FileOperations {
 		return SingletonHelper.INSTANCE;
 	}
 	
-	public void createFolder(String path){
-		// TODO Auto-generated method stub
+	public boolean createFolder(String path){
+		boolean success = (new File(path)).mkdir();
+		return success;
 	}
 	
-	public void deleteFile(String path){
-		// TODO Auto-generated method stub
+	public boolean deleteFile(String path){
+		boolean success = (new File(path)).delete();
+		return success;
 	}
 	
 	public void copyFile(String path, String destination){
-		// TODO Auto-generated method stub
+		Path source = Paths.get(path);
+		Path copyDestination = Paths.get(destination);
+		try 
+		{
+			Files.copy(source, copyDestination);
+		} 
+		
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	public boolean compareHashes(String hash1, String hash2){
