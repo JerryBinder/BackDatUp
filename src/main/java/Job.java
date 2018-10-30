@@ -31,8 +31,6 @@ public abstract class Job {
 	
 	public abstract void addDestination(String destination);
 	public abstract void removeDestination(String destination);
-	public abstract void addFile(String file);
-	public abstract void removeFile(String file);
 	
 	/**
 	 * Deletes job, empties both sets.
