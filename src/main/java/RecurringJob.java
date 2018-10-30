@@ -38,17 +38,6 @@ public class RecurringJob extends Job {
 		timesToRepeat--;
 	}
 
-	@Override
-	public void addFile(String file) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void removeFile(String file) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void deleteJob() {
