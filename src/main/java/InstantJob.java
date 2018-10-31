@@ -2,6 +2,7 @@ package main.java;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.io.File;
 
 public class InstantJob extends Job {
 	
@@ -11,8 +12,14 @@ public class InstantJob extends Job {
 
 	@Override
 	public boolean performJob() {
+		File f;
 		for(int i = 0; i < this.destinationPaths.size(); i++)
 		{
+			f = new File(destinationPaths.get(i));
+			if(f.exists() == false)
+			{
+				fileOperations.createFolder(destinationPaths.get(i));
+			}
 			fileOperations.copyFile(sourceFiles, destinationPaths.get(i));
 		}
 		return true;
