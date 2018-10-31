@@ -2,6 +2,7 @@ package main.java;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.io.File;
 
 public class RecurringJob extends Job {
 	int interval;		// number of sec/ms/whatever between each recurrance
@@ -16,8 +17,15 @@ public class RecurringJob extends Job {
 
 	@Override
 	public boolean performJob() {
+		File f;
+		f = new File(destinationPaths.get(i));
 		for(int i = 0; i < this.destinationPaths.size(); i++)
 		{
+			f = new File(destinationPaths.get(i));
+			if(f.exists() == false)
+			{
+				fileOperations.createFolder(destinationPaths.get(i));
+			}
 			fileOperations.copyFile(sourceFiles, destinationPaths.get(i));
 		}
 		timesToRepeat--;
