@@ -11,16 +11,14 @@ import java.util.Calendar;
  *
  */
 public abstract class Job {
-	String sourceFiles;
+	String sourceFile;
 	ArrayList<String> destinationPaths;
-	Calendar timing;
 	FileOperations fileOperations;
+	Calendar timing;
 	
-	Job(String sourceFiles2, ArrayList<String> destinationPaths, Calendar timing, FileOperations fileoperations){
-		this.sourceFiles = sourceFiles2;
+	Job(String sourceFile, ArrayList<String> destinationPaths, Calendar timing){
+		this.sourceFile = sourceFile;
 		this.destinationPaths = destinationPaths;
-		this.timing = timing;
-		this.fileOperations = fileoperations;
 	}
 	
 	/**

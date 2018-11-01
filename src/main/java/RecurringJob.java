@@ -5,32 +5,39 @@ import java.util.Calendar;
 import java.io.File;
 
 public class RecurringJob extends Job {
-	int interval;		// number of sec/ms/whatever between each recurrance
+	int interval;		// number of minutes between each recurrance
 	int timesToRepeat;	// number of times job will recur
 	
-	RecurringJob(String sourceFiles, ArrayList<String> destinationPaths, Calendar timing, int interval, int timesToRepeat, FileOperations fileoperations){
-		super(sourceFiles, destinationPaths, timing, fileoperations);
+	RecurringJob(String sourceFile, ArrayList<String> destinationPaths, Calendar timing, int interval, int timesToRepeat){
+		super(sourceFile, destinationPaths, timing);
 		this.interval = interval;
 		this.timesToRepeat = timesToRepeat;
-		this.fileOperations = fileoperations;
+	}
+	
+	RecurringJob(String sourceFile, ArrayList<String> destinationPaths, int interval, int timesToRepeat){
+		this(sourceFile, destinationPaths, Calendar.getInstance(), interval, timesToRepeat);
 	}
 
 	@Override
 	public boolean performJob() {
 		File f;
-		// f = new File(destinationPaths.get(i));
-		// this appears to be pated from inside the for loop
-		for(int i = 0; i < this.destinationPaths.size(); i++)
+		FileOperations fileOperations = FileOperations.getInstance();
+		for(String path : destinationPaths)
 		{
-			f = new File(destinationPaths.get(i));
+			f = new File(path);
 			if(f.exists() == false)
 			{
-				fileOperations.createFolder(destinationPaths.get(i));
+				fileOperations.createFolder(path);
 			}
-			fileOperations.copyFile(sourceFiles, destinationPaths.get(i));
+			fileOperations.copyFile(sourceFile, path);
 		}
+		
 		timesToRepeat--;
-		return true;
+		if(timesToRepeat > 0){
+			timing.add(Calendar.MINUTE, interval);	// TODO will this loop between days? must test
+		}
+		
+		return true;	// TODO make this actually return success/failure via verifyCompletion
 	}
 	
 	private boolean verifyCompletion() {

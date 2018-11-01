@@ -6,28 +6,33 @@ import java.io.File;
 
 public class InstantJob extends Job {
 	
-	InstantJob(String sourceFiles, ArrayList<String> destinationPaths, Calendar timing, FileOperations fileoperations){
-		super(sourceFiles, destinationPaths, timing, fileoperations);
+	InstantJob(String sourceFile, ArrayList<String> destinationPaths, Calendar timing){
+		super(sourceFile, destinationPaths, timing);
+	}
+	
+	InstantJob(String sourceFile, ArrayList<String> destinationPaths){
+		this(sourceFile, destinationPaths, Calendar.getInstance())
 	}
 
 	@Override
 	public boolean performJob() {
 		File f;
-		for(int i = 0; i < this.destinationPaths.size(); i++)
+		FileOperations fileOperations = FileOperations.getInstance();
+		for(String path : destinationPaths)
 		{
-			f = new File(destinationPaths.get(i));
+			f = new File(path);
 			if(f.exists() == false)
 			{
-				fileOperations.createFolder(destinationPaths.get(i));
+				fileOperations.createFolder(path);
 			}
-			fileOperations.copyFile(sourceFiles, destinationPaths.get(i));
+			fileOperations.copyFile(sourceFile, path);
 		}
-		return true;
+		return true;	// TODO make this actually return success/failure via verifyCompletion
 	}
 	
 	private boolean verifyCompletion() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
