@@ -11,7 +11,7 @@ public class InstantJob extends Job {
 	}
 	
 	InstantJob(String sourceFile, ArrayList<String> destinationPaths){
-		this(sourceFile, destinationPaths, Calendar.getInstance())
+		this(sourceFile, destinationPaths, Calendar.getInstance()
 	}
 
 	@Override
