@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 
 public class BackDatUp {
     private JPanel panelMain;
@@ -37,7 +41,6 @@ public class BackDatUp {
 
             }
         });
-
     }
 
     public static void main(String[] args) {
@@ -45,7 +48,20 @@ public class BackDatUp {
         JFrame frame = new JFrame("BackDatUp");
         frame.setContentPane(new BackDatUp().panelMain);
         //close program operation
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent we) {
+                int result = JOptionPane.showConfirmDialog(frame,
+                        "Scheduled jobs are only run when program is running!  Are you sure you want to quit? (Missed jobs will be run next launch)",
+                            "Exit Confirmation: ", JOptionPane.YES_NO_OPTION);
+                if(result == JOptionPane.YES_OPTION)
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                else if(result == JOptionPane.NO_OPTION)
+                    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            }
+        });
+
+
+
 
         //display
         frame.setPreferredSize(new Dimension(800, 600));
