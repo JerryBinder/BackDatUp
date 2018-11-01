@@ -18,7 +18,8 @@ public class RecurringJob extends Job {
 	@Override
 	public boolean performJob() {
 		File f;
-		f = new File(destinationPaths.get(i));
+		// f = new File(destinationPaths.get(i));
+		// this appears to be pated from inside the for loop
 		for(int i = 0; i < this.destinationPaths.size(); i++)
 		{
 			f = new File(destinationPaths.get(i));
