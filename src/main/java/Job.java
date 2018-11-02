@@ -13,7 +13,6 @@ import java.util.Calendar;
 public abstract class Job {
 	String sourceFile;
 	ArrayList<String> destinationPaths;
-	FileOperations fileOperations;
 	Calendar timing;
 	
 	Job(String sourceFile, ArrayList<String> destinationPaths, Calendar timing){
