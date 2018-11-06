@@ -1,73 +1,126 @@
 package main.java;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JButton;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+
+import javax.swing.JTextPane;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
-import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
+import java.awt.event.ActionEvent;
 
 public class BackDatUp {
-    private JPanel panelMain;
-    private JButton scheduleAJobButton;
-    private JButton deleteAJobButton;
-    private JButton displayBackupsButton;
-    private JButton editAJobButton;
 
-    public BackDatUp() {
-        scheduleAJobButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //schedule job logic
-            }
-        });
-        deleteAJobButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //show scheduled jobs to delete
-            }
-        });
-        editAJobButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+	private JFrame frame;
 
-            }
-        });
-        displayBackupsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					BackDatUp window = new BackDatUp();
+					window.frame.setVisible(true);
+					window.frame.setPreferredSize(new Dimension(800, 600));
+					window.frame.pack();
+					window.frame.setResizable(false);
+					window.frame.setLocationRelativeTo(null);
+					window.frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+					window.frame.addWindowListener(new WindowAdapter() {
+						@Override
+						public void windowClosing(WindowEvent we) {
+							String ObjButtons[] = {"Yes", "No"};
+							int result = JOptionPane.showOptionDialog(null, "Scheduled jobs are only run when program is running!  Are you sure you want to quit? (Missed jobs will be run next launch)",
+									"Exit Confirmation", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
+							if(result == JOptionPane.YES_OPTION) {
+								System.exit(0);
+							}
+						}
+					});
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
-            }
-        });
-    }
+	/**
+	 * Create the application.
+	 */
+	public BackDatUp() {
+		initialize();
+	}
 
-    public static void main(String[] args) {
-        //create jframe for application
-        JFrame frame = new JFrame("BackDatUp");
-        frame.setContentPane(new BackDatUp().panelMain);
-        //close program operation
-        frame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent we) {
-                int result = JOptionPane.showConfirmDialog(frame,
-                        "Scheduled jobs are only run when program is running!  Are you sure you want to quit? (Missed jobs will be run next launch)",
-                            "Exit Confirmation: ", JOptionPane.YES_NO_OPTION);
-                if(result == JOptionPane.YES_OPTION)
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                else if(result == JOptionPane.NO_OPTION)
-                    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            }
-        });
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		frame.getContentPane().setLayout(gridBagLayout);
+		
+		JTextPane textPane = new JTextPane();
+		GridBagConstraints gbc_textPane = new GridBagConstraints();
+		gbc_textPane.gridheight = 5;
+		gbc_textPane.insets = new Insets(0, 0, 5, 0);
+		gbc_textPane.fill = GridBagConstraints.BOTH;
+		gbc_textPane.gridx = 0;
+		gbc_textPane.gridy = 0;
+		frame.getContentPane().add(textPane, gbc_textPane);
+		
+		JButton btnScheduleJob = new JButton("Schedule a job");
+		btnScheduleJob.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		
+		JButton btnDisplayBackups = new JButton("Display Backups");
+		GridBagConstraints gbc_btnDisplayBackups = new GridBagConstraints();
+		gbc_btnDisplayBackups.insets = new Insets(0, 0, 5, 0);
+		gbc_btnDisplayBackups.gridx = 0;
+		gbc_btnDisplayBackups.gridy = 5;
+		frame.getContentPane().add(btnDisplayBackups, gbc_btnDisplayBackups);
+		GridBagConstraints gbc_btnScheduleJob = new GridBagConstraints();
+		gbc_btnScheduleJob.insets = new Insets(0, 0, 5, 0);
+		gbc_btnScheduleJob.gridx = 0;
+		gbc_btnScheduleJob.gridy = 6;
+		frame.getContentPane().add(btnScheduleJob, gbc_btnScheduleJob);
+		
+		JButton btnDeleteJob = new JButton("Delete a job");
+		btnDeleteJob.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		GridBagConstraints gbc_btnDeleteJob = new GridBagConstraints();
+		gbc_btnDeleteJob.insets = new Insets(0, 0, 5, 0);
+		gbc_btnDeleteJob.gridx = 0;
+		gbc_btnDeleteJob.gridy = 7;
+		frame.getContentPane().add(btnDeleteJob, gbc_btnDeleteJob);
+		
+		JButton btnEditJob = new JButton("Edit a job");
+		btnEditJob.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		GridBagConstraints gbc_btnEditJob = new GridBagConstraints();
+		gbc_btnEditJob.gridx = 0;
+		gbc_btnEditJob.gridy = 8;
+		frame.getContentPane().add(btnEditJob, gbc_btnEditJob);
+	}
 
-
-
-
-        //display
-        frame.setPreferredSize(new Dimension(800, 600));
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
-        frame.setVisible(true);
-    }
 }
