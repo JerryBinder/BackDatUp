@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
+import javax.swing.JLabel;
 
 public class BackDatUp {
 
@@ -69,18 +70,27 @@ public class BackDatUp {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		frame.getContentPane().setLayout(gridBagLayout);
 		
+		JLabel lblJobQueue = new JLabel("Job Queue:");
+		GridBagConstraints gbc_lblJobQueue = new GridBagConstraints();
+		gbc_lblJobQueue.anchor = GridBagConstraints.WEST;
+		gbc_lblJobQueue.insets = new Insets(0, 0, 5, 0);
+		gbc_lblJobQueue.gridx = 0;
+		gbc_lblJobQueue.gridy = 0;
+		frame.getContentPane().add(lblJobQueue, gbc_lblJobQueue);
+		
 		JTextPane textPane = new JTextPane();
+		textPane.setEditable(false);
 		GridBagConstraints gbc_textPane = new GridBagConstraints();
 		gbc_textPane.gridheight = 5;
 		gbc_textPane.insets = new Insets(0, 0, 5, 0);
 		gbc_textPane.fill = GridBagConstraints.BOTH;
 		gbc_textPane.gridx = 0;
-		gbc_textPane.gridy = 0;
+		gbc_textPane.gridy = 1;
 		frame.getContentPane().add(textPane, gbc_textPane);
 		
 		JButton btnScheduleJob = new JButton("Schedule a job");
@@ -93,12 +103,12 @@ public class BackDatUp {
 		GridBagConstraints gbc_btnDisplayBackups = new GridBagConstraints();
 		gbc_btnDisplayBackups.insets = new Insets(0, 0, 5, 0);
 		gbc_btnDisplayBackups.gridx = 0;
-		gbc_btnDisplayBackups.gridy = 5;
+		gbc_btnDisplayBackups.gridy = 6;
 		frame.getContentPane().add(btnDisplayBackups, gbc_btnDisplayBackups);
 		GridBagConstraints gbc_btnScheduleJob = new GridBagConstraints();
 		gbc_btnScheduleJob.insets = new Insets(0, 0, 5, 0);
 		gbc_btnScheduleJob.gridx = 0;
-		gbc_btnScheduleJob.gridy = 6;
+		gbc_btnScheduleJob.gridy = 7;
 		frame.getContentPane().add(btnScheduleJob, gbc_btnScheduleJob);
 		
 		JButton btnDeleteJob = new JButton("Delete a job");
@@ -109,7 +119,7 @@ public class BackDatUp {
 		GridBagConstraints gbc_btnDeleteJob = new GridBagConstraints();
 		gbc_btnDeleteJob.insets = new Insets(0, 0, 5, 0);
 		gbc_btnDeleteJob.gridx = 0;
-		gbc_btnDeleteJob.gridy = 7;
+		gbc_btnDeleteJob.gridy = 8;
 		frame.getContentPane().add(btnDeleteJob, gbc_btnDeleteJob);
 		
 		JButton btnEditJob = new JButton("Edit a job");
@@ -119,7 +129,7 @@ public class BackDatUp {
 		});
 		GridBagConstraints gbc_btnEditJob = new GridBagConstraints();
 		gbc_btnEditJob.gridx = 0;
-		gbc_btnEditJob.gridy = 8;
+		gbc_btnEditJob.gridy = 9;
 		frame.getContentPane().add(btnEditJob, gbc_btnEditJob);
 	}
 
