@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 /**
  * @author Jerry Binder, Dustin Jackson
  * Uses Bill Pugh Singleton to provide access to a single instance of FileOperations.
@@ -32,11 +33,11 @@ public class FileOperations {
 	public void copyFile(String path, String destination){
 		Path source = Paths.get(path);
 		Path copyDestination = Paths.get(destination);
+		
 		try 
 		{
 			Files.copy(source, copyDestination);
-		} 
-		
+		}
 		catch (IOException e) 
 		{
 			e.printStackTrace();
