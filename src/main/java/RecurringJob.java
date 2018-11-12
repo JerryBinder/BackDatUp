@@ -37,12 +37,23 @@ public class RecurringJob extends Job {
 			timing.add(Calendar.MINUTE, interval);	// TODO will this loop between days? must test
 		}
 		
-		return true;	// TODO make this actually return success/failure via verifyCompletion
+		return this.verifyCompletion();
 	}
 	
-	private boolean verifyCompletion() {
-		// TODO Auto-generated method stub
-		return false;
+	private boolean verifyCompletion(){
+		HashFileUtil hfu = new HashFileUtil();
+		String sourceHash = hfu.generateMd5Hash(sourceFile);
+		String destinationHash;
+		// List failedDestinations = new List();	// contains paths of all destinations that don't have the current file
+		
+		for(String d : destinationPaths){
+			destinationHash = hfu.generateMd5Hash(d);
+			if(sourceHash != destinationHash){
+				// failedDestinations.add(d);
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
