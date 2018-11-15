@@ -18,6 +18,10 @@ public class RecurringJob extends Job {
 		this(sourceFile, destinationPaths, Calendar.getInstance(), interval, timesToRepeat);
 	}
 
+	RecurringJob(String sourceFile, ArrayList<String> destinationPaths, Calendar timing) {
+		super(sourceFile, destinationPaths, timing);
+	}
+
 	@Override
 	public boolean performJob() {
 		File f;
