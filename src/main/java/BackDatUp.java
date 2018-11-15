@@ -20,6 +20,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.SpringLayout;
 import javax.swing.JFileChooser;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Main BackDatUp.java class
@@ -44,8 +46,9 @@ public class BackDatUp {
 			public void run() {
 				try {
 					BackDatUp window = new BackDatUp();
+					window.BackDatUp.setTitle("Back Dat Up (BDU) v1.0");
 					window.BackDatUp.setVisible(true);
-					window.BackDatUp.setPreferredSize(new Dimension(800, 600));
+					window.BackDatUp.setPreferredSize(new Dimension(640, 480));
 					window.BackDatUp.pack();
 					window.BackDatUp.setResizable(false);
 					window.BackDatUp.setLocationRelativeTo(null);
@@ -86,8 +89,9 @@ public class BackDatUp {
 		ArrayList<String> jobQueue = new ArrayList<>();
 		
 		//test variables
-		jobQueue.add("Job 1: Scheduled for 12/12/18 14:30\n");
-		jobQueue.add("Job 2: Scheduled for 12/13/18 10:22\n");
+		jobQueue.add("Anything added to the jobQueue ArrayList will be displayed here...");
+		jobQueue.add("Job 1: Scheduled for 12/12/18 14:30");
+		jobQueue.add("Job 2: Scheduled for 12/13/18 10:22");
 		
 		BackDatUp = new JFrame();
 		BackDatUp.setBounds(100, 100, 450, 300);
@@ -115,6 +119,7 @@ public class BackDatUp {
 		for(String s:jobQueue) {
 			try {
 				doc.insertString(doc.getLength(), s, null);
+				doc.insertString(doc.getLength(), "\n", null);
 			} catch (BadLocationException e) {
 				e.printStackTrace();
 			}
@@ -160,7 +165,13 @@ public class BackDatUp {
 		});
 		
 		//display backups button
-		JButton btnDisplayBackups = new JButton("Display Backups");
+		JButton btnDisplayBackups = new JButton("Display Backups");		
+		btnDisplayBackups.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//display all backup locations
+				JOptionPane.showMessageDialog(null, "TODO: Add backup locations", "backup locations", 1);
+			}
+		});
 		springLayout.putConstraint(SpringLayout.NORTH, btnScheduleJob, 6, SpringLayout.SOUTH, btnDisplayBackups);
 		springLayout.putConstraint(SpringLayout.EAST, btnScheduleJob, 0, SpringLayout.EAST, btnDisplayBackups);
 		springLayout.putConstraint(SpringLayout.EAST, textPane, -35, SpringLayout.WEST, btnDisplayBackups);
@@ -177,17 +188,19 @@ public class BackDatUp {
 		springLayout.putConstraint(SpringLayout.EAST, btnDeleteJob, 0, SpringLayout.EAST, btnDisplayBackups);
 		btnDeleteJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				JOptionPane.showMessageDialog(null, "TODO: Add delete ? select from job list in text area or separate popup?", "delete item from job list", 1);
 			}
 		});
 		BackDatUp.getContentPane().add(btnDeleteJob);
 		
+		//edit a job button
 		JButton btnEditJob = new JButton("Edit a job");
 		springLayout.putConstraint(SpringLayout.NORTH, btnEditJob, 6, SpringLayout.SOUTH, btnDeleteJob);
 		springLayout.putConstraint(SpringLayout.WEST, btnEditJob, -187, SpringLayout.EAST, BackDatUp.getContentPane());
 		springLayout.putConstraint(SpringLayout.EAST, btnEditJob, 0, SpringLayout.EAST, btnDisplayBackups);
 		btnEditJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "TODO: Add edit ? select from job list in text area or separate popup?", "edit item from job list", 1);
 			}
 		});
 		BackDatUp.getContentPane().add(btnEditJob);
