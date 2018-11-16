@@ -22,6 +22,9 @@ import javax.swing.SpringLayout;
 import javax.swing.JFileChooser;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JList;
+import javax.swing.ListSelectionModel;
+import java.awt.Label;
 
 /**
  * Main BackDatUp.java class
@@ -34,7 +37,7 @@ public class BackDatUp {
 
 	private JFrame BackDatUp;
 	/**
-	 * @wbp.nonvisual location=14,329
+	 * @wbp.nonvisual location=14,549
 	 */
 	private final JFileChooser fileChooser = new JFileChooser();
 
@@ -60,6 +63,7 @@ public class BackDatUp {
 							int result = JOptionPane.showOptionDialog(null, "Scheduled jobs are only run when program is running!  Are you sure you want to quit? (Missed jobs will be run next launch)",
 									"Exit Confirmation", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
 							if(result == JOptionPane.YES_OPTION) {
+								//TODO: add logic here to save all schedule data before closing the application
 								System.exit(0);
 							}
 						}
@@ -83,7 +87,7 @@ public class BackDatUp {
 	 */
 	private void initialize() {
 		
-		//Create new schedule - should add logic here to add XML/save data to the schedule
+		//Create new schedule - should add logic here to load XML/save data from schedule to the program
 		Schedule schedule = new Schedule();		
 		//ArrayList of jobQueue
 		ArrayList<String> jobQueue = new ArrayList<>();
@@ -94,7 +98,7 @@ public class BackDatUp {
 		jobQueue.add("Job 2: Scheduled for 12/13/18 10:22");
 		
 		BackDatUp = new JFrame();
-		BackDatUp.setBounds(100, 100, 450, 300);
+		BackDatUp.setBounds(100, 100, 832, 518);
 		BackDatUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		SpringLayout springLayout = new SpringLayout();
 		BackDatUp.getContentPane().setLayout(springLayout);
@@ -107,9 +111,9 @@ public class BackDatUp {
 		
 		//Job queue textarea
 		JTextPane textPane = new JTextPane();
-		springLayout.putConstraint(SpringLayout.NORTH, textPane, 19, SpringLayout.NORTH, BackDatUp.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, textPane, 0, SpringLayout.WEST, BackDatUp.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, textPane, 209, SpringLayout.NORTH, BackDatUp.getContentPane());
+		springLayout.putConstraint(SpringLayout.NORTH, textPane, 5, SpringLayout.SOUTH, lblJobQueue);
+		springLayout.putConstraint(SpringLayout.WEST, textPane, 10, SpringLayout.WEST, BackDatUp.getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, textPane, 275, SpringLayout.NORTH, BackDatUp.getContentPane());
 		textPane.setEditable(false);
 		BackDatUp.getContentPane().add(textPane);
 		
@@ -161,11 +165,14 @@ public class BackDatUp {
 				//create job
 				RecurringJob myJob = new RecurringJob(path+filename, destPath, 1, 1);
 				schedule.addJob(myJob);
+				
+				//TODO: save schedule to XML here?
 			}
 		});
 		
 		//display backups button
 		JButton btnDisplayBackups = new JButton("Display Backups");		
+		springLayout.putConstraint(SpringLayout.EAST, textPane, -51, SpringLayout.WEST, btnDisplayBackups);
 		btnDisplayBackups.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//display all backup locations
@@ -174,7 +181,6 @@ public class BackDatUp {
 		});
 		springLayout.putConstraint(SpringLayout.NORTH, btnScheduleJob, 6, SpringLayout.SOUTH, btnDisplayBackups);
 		springLayout.putConstraint(SpringLayout.EAST, btnScheduleJob, 0, SpringLayout.EAST, btnDisplayBackups);
-		springLayout.putConstraint(SpringLayout.EAST, textPane, -35, SpringLayout.WEST, btnDisplayBackups);
 		springLayout.putConstraint(SpringLayout.EAST, btnDisplayBackups, -39, SpringLayout.EAST, BackDatUp.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, btnDisplayBackups, -187, SpringLayout.EAST, BackDatUp.getContentPane());
 		springLayout.putConstraint(SpringLayout.NORTH, btnDisplayBackups, 19, SpringLayout.NORTH, BackDatUp.getContentPane());
@@ -204,5 +210,20 @@ public class BackDatUp {
 			}
 		});
 		BackDatUp.getContentPane().add(btnEditJob);
+		
+		JTextPane textPane_1 = new JTextPane();
+		springLayout.putConstraint(SpringLayout.NORTH, textPane_1, 327, SpringLayout.NORTH, BackDatUp.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, textPane_1, 10, SpringLayout.WEST, BackDatUp.getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, textPane_1, -10, SpringLayout.SOUTH, BackDatUp.getContentPane());
+		springLayout.putConstraint(SpringLayout.EAST, textPane_1, -238, SpringLayout.EAST, BackDatUp.getContentPane());
+		BackDatUp.getContentPane().add(textPane_1);
+		
+		Label label = new Label("Console:");
+		springLayout.putConstraint(SpringLayout.NORTH, label, 17, SpringLayout.SOUTH, textPane);
+		springLayout.putConstraint(SpringLayout.WEST, label, 9, SpringLayout.WEST, lblJobQueue);
+		springLayout.putConstraint(SpringLayout.SOUTH, label, -6, SpringLayout.NORTH, textPane_1);
+		springLayout.putConstraint(SpringLayout.EAST, label, 0, SpringLayout.EAST, lblJobQueue);
+		BackDatUp.getContentPane().add(label);
+		
 	}
 }
