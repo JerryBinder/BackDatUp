@@ -31,12 +31,12 @@ public class FileOperations {
 	}
 	
 	public void copyFile(String path, String destination){
-		Path source = Paths.get(path);
-		Path copyDestination = Paths.get(destination);
 		
 		try 
 		{
-			Files.copy(source, copyDestination);
+			File src = new File(path);
+			File target = new File(destination);
+			Files.copy(src.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		}
 		catch (IOException e) 
 		{
