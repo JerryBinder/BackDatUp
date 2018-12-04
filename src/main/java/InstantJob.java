@@ -7,6 +7,11 @@ import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Job that happens only once.
+ * @author Jerry Binder
+ *
+ */
 public class InstantJob extends Job {
 	
 	InstantJob(String sourceFile, ArrayList<String> destinationPaths, Calendar timing){

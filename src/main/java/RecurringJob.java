@@ -2,8 +2,16 @@ package main.java;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import javax.xml.bind.annotation.XmlElement;
+
 import java.io.File;
 
+/**
+ * Job that happens a set number of times.
+ * @author Jerry Binder
+ *
+ */
 public class RecurringJob extends Job {
 	int interval;		// number of minutes between each recurrance
 	int timesToRepeat;	// number of times job will recur
@@ -77,5 +85,11 @@ public class RecurringJob extends Job {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@XmlElement
+	public int getInterval() { return interval; }
+	
+	@XmlElement
+	public int getTimesToRepeat() { return timesToRepeat; }
 
 }
