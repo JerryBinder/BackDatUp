@@ -1,14 +1,15 @@
 package test.java;
 
-import java.io.File;
+import main.java.HashFileUtil;
 
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.java.HashFileUtil;
-
 class HashFileUtilTest {
+	
+	protected final String TEST_FILE_1 = "/test1.txt";
+	protected final String TEST_FILE_2 = "/test2.txt";
 	
 	HashFileUtil hasher;
 	
@@ -17,17 +18,19 @@ class HashFileUtilTest {
 		hasher = new HashFileUtil();
 	}
 
+	/**
+	 * Ensures hash method generates different hashes for different files.
+	 */
 	@Test
 	void generateMd5Hashtest() {
-		//TODO : create test file in project folder
-		assertEquals(this.hasher.generateMd5Hash("C:\\Users\\Dustin\\Desktop\\hellothere"), this.hasher.generateMd5Hash("C:\\Users\\Dustin\\Desktop\\hellothere"));
+		assertNotEquals(this.hasher.generateMd5Hash(TEST_FILE_1), this.hasher.generateMd5Hash(TEST_FILE_2));
 	}
 	
+	/**
+	 * Ensures hash method consistently generates the same hash for the same file.
+	 */
 	@Test
-	void generateMd5HashTestFile() {
-		//TODO : create test file in project folder
-		File file = new File("C:\\Users\\Dustin\\Desktop\\hellothere");
-		assertEquals(this.hasher.generateMd5Hash(file), this.hasher.generateMd5Hash(file));
+	void hashesAreConsistentTest() {
+		assertEquals(this.hasher.generateMd5Hash(TEST_FILE_1), this.hasher.generateMd5Hash(TEST_FILE_1));
 	}
-
 }

@@ -8,6 +8,9 @@ import org.junit.Test;
 
 
 class FileOperationsTest {
+	
+	protected final String TEST_FILE_1 = "/test1.txt";
+	// protected final String TEST_FILE_2 = "/test2.txt";
 
 	FileOperations operations;
 	@Before
@@ -17,19 +20,19 @@ class FileOperationsTest {
 
 	@Test
 	void testCreateFolder() {
-		//TODO : create test file in project folder
-		assertEquals(true, this.operations.createFolder("C:\\Users\\Dustin\\Desktop\\hellothere"));
+		assertEquals(true, this.operations.createFolder(TEST_FILE_1));
 	}
 	
-	@Test
-	void testCompareHashes() {
-		assertEquals(false, this.operations.compareHashes("036353ede97e766a573c73a6aae221fb", "3e1ffeb20ef5aa22c9aa1c0eca143acb"));
-	}
+	// This only tests a String comparison. Brings coverage % up but is otherwise useless.
+//	@Test
+//	void testCompareHashes() {
+//		assertEquals(false, this.operations.compareHashes("036353ede97e766a573c73a6aae221fb", "3e1ffeb20ef5aa22c9aa1c0eca143acb"));
+//	}
 	
 	@Test
 	void testdeleteFile() {
 		//TODO : create test file in project folder
-		assertEquals(true, this.operations.deleteFile("C:\\Users\\Dustin\\Desktop\\hellothere"));
+		assertEquals(true, this.operations.deleteFile(TEST_FILE_1));
 	}
 
 }
