@@ -1,5 +1,6 @@
 package main.java;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import javax.xml.bind.annotation.XmlElement;
@@ -9,13 +10,18 @@ import javax.xml.bind.annotation.XmlElement;
  *
  */
 public abstract class Job {
-	String sourceFile;
+	File sourceFile;
 	ArrayList<String> destinationPaths;
 	Calendar timing;
 	
-	Job(String sourceFile, ArrayList<String> destinationPaths, Calendar timing){
+	Job(File sourceFile, ArrayList<String> destinationPaths, Calendar timing){
 		this.sourceFile = sourceFile;
 		this.destinationPaths = destinationPaths;
+		this.timing = timing;
+	}
+	
+	Job(String sourceFile, ArrayList<String> destinationPaths, Calendar timing){
+		this(new File(sourceFile), destinationPaths, timing);
 	}
 	
 	/**
@@ -28,7 +34,7 @@ public abstract class Job {
 	public abstract void removeDestination(String destination);
 	
 	@XmlElement
-	public String getSourceFile(){ return sourceFile; };
+	public File getSourceFile(){ return sourceFile; };
 	
 	@XmlElement
 	public ArrayList<String> getDestinationPaths(){ return destinationPaths; };

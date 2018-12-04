@@ -24,27 +24,44 @@ public class FileOperations {
 		return success;
 	}
 	
-	public boolean deleteFile(String path){
-		File temp = new File(path);
+	
+	
+	/**
+	 * Deletes a file or directory. Directory must be empty to be deleted.
+	 * @param File
+	 * @return success
+	 */
+	public boolean deleteFile(File file){
 		boolean success = false;
-		if (temp.exists()){
-			success = (new File(path)).delete();
+		if (file.exists() && file.isFile()){
+			success = file.delete();
 		}
 		return success;
 	}
 	
-	public void copyFile(String path, String destination){
-		
+	public boolean deleteFile(String path){
+		return deleteFile(new File(path));
+	}
+	
+	/**
+	 * Copies a file from one
+	 * @param file
+	 * @param destination
+	 */
+	public void copyFile(File file, String destination){
 		try 
 		{
-			File src = new File(path);
 			File target = new File(destination);
-			Files.copy(src.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+			Files.copy(file.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		}
 		catch (IOException e) 
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public void copyFile(String path, String destination){
+		copyFile(new File(path), destination);
 	}
 	
 	public boolean compareHashes(String hash1, String hash2){

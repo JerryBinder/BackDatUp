@@ -9,8 +9,8 @@ import org.junit.Test;
 
 class HashFileUtilTest {
 	
-	protected final String TEST_FILE_1 = "/test1.txt";
-	protected final String TEST_FILE_2 = "/test2.txt";
+	protected final String TEST_FILE_1 = "./test1.txt";
+	protected final String TEST_FILE_2 = "./test2.txt";
 	
 	HashFileUtil hasher;
 	

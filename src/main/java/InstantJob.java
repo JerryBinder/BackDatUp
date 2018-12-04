@@ -14,11 +14,11 @@ import java.security.NoSuchAlgorithmException;
  */
 public class InstantJob extends Job {
 	
-	InstantJob(String sourceFile, ArrayList<String> destinationPaths, Calendar timing){
+	public InstantJob(File sourceFile, ArrayList<String> destinationPaths, Calendar timing){
 		super(sourceFile, destinationPaths, timing);
 	}
 	
-	InstantJob(String sourceFile, ArrayList<String> destinationPaths){
+	public InstantJob(File sourceFile, ArrayList<String> destinationPaths){
 		this(sourceFile, destinationPaths, Calendar.getInstance());
 	}
 

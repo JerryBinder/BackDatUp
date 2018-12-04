@@ -16,18 +16,14 @@ public class RecurringJob extends Job {
 	int interval;		// number of minutes between each recurrance
 	int timesToRepeat;	// number of times job will recur
 	
-	RecurringJob(String sourceFile, ArrayList<String> destinationPaths, Calendar timing, int interval, int timesToRepeat){
+	RecurringJob(File sourceFile, ArrayList<String> destinationPaths, Calendar timing, int interval, int timesToRepeat){
 		super(sourceFile, destinationPaths, timing);
 		this.interval = interval;
 		this.timesToRepeat = timesToRepeat;
 	}
 	
-	RecurringJob(String sourceFile, ArrayList<String> destinationPaths, int interval, int timesToRepeat){
+	RecurringJob(File sourceFile, ArrayList<String> destinationPaths, int interval, int timesToRepeat){
 		this(sourceFile, destinationPaths, Calendar.getInstance(), interval, timesToRepeat);
-	}
-
-	RecurringJob(String sourceFile, ArrayList<String> destinationPaths, Calendar timing) {
-		super(sourceFile, destinationPaths, timing);
 	}
 
 	@Override

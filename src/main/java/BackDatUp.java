@@ -14,6 +14,7 @@ import javax.swing.text.Document;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.awt.event.ActionEvent;
@@ -63,7 +64,6 @@ public class BackDatUp {
 							int result = JOptionPane.showOptionDialog(null, "Scheduled jobs are only run when program is running!  Are you sure you want to quit? (Missed jobs will be run next launch)",
 									"Exit Confirmation", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
 							if(result == JOptionPane.YES_OPTION) {
-								//TODO: add logic here to save all schedule data before closing the application
 								System.exit(0);
 							}
 						}
@@ -86,9 +86,8 @@ public class BackDatUp {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		// Schedule schedule = new Schedule();
 		
-		//Create new schedule - should add logic here to load XML/save data from schedule to the program
-		Schedule schedule = new Schedule();		
 		//ArrayList of jobQueue
 		ArrayList<String> jobQueue = new ArrayList<>();
 		
@@ -146,8 +145,9 @@ public class BackDatUp {
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				
 				//get path and filename of file to copy
-				String path = fileChooser.getSelectedFile().getAbsolutePath();
-				//String filename=fileChooser.getSelectedFile().getName();
+				// String path = fileChooser.getSelectedFile().getAbsolutePath();
+				File file = fileChooser.getSelectedFile();
+				String filename=fileChooser.getSelectedFile().getName();
 				
 				//display dialog
 				fileChooser.setDialogTitle("Choose Destination Directory...");
@@ -169,8 +169,8 @@ public class BackDatUp {
 					// when user hits "Ok" it creates a job of the specified type and adds it
 				
 				//create job
-				InstantJob myJob = new InstantJob(path, destPath);
-				schedule.addJob(myJob);
+				InstantJob myJob = new InstantJob(file, destPath);
+				Schedule.getInstance().addJob(myJob);
 			}
 		});
 		
