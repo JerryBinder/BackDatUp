@@ -26,6 +26,7 @@ public class FileOperations {
 		return success;
 	}
 	
+	// Do we even need this?
 	public boolean deleteFile(String path){
 		boolean success = (new File(path)).delete();
 		return success;

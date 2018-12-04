@@ -31,7 +31,6 @@ class FileOperationsTest {
 	
 	@Test
 	void testdeleteFile() {
-		//TODO : create test file in project folder
 		assertEquals(true, this.operations.deleteFile(TEST_FILE_1));
 	}
 
