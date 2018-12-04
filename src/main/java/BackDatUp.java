@@ -136,8 +136,7 @@ public class BackDatUp {
 		springLayout.putConstraint(SpringLayout.WEST, btnScheduleJob, -187, SpringLayout.EAST, BackDatUp.getContentPane());
 		btnScheduleJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//display dialog				
-				// JOptionPane.showMessageDialog(null, "Choose a File/directory to Backup", "Backup a File", 1);
+				//display dialog
 				fileChooser.setDialogTitle("Choose Source File...");
 				
 				//open the file chooser for location of file
@@ -147,11 +146,10 @@ public class BackDatUp {
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				
 				//get path and filename of file to copy
-				String path=fileChooser.getSelectedFile().getAbsolutePath();
+				String path = fileChooser.getSelectedFile().getAbsolutePath();
 				//String filename=fileChooser.getSelectedFile().getName();
 				
-				//display dialog				
-				// JOptionPane.showMessageDialog(null, "Choose a Backup Location", "Directory to Backup", 1);
+				//display dialog
 				fileChooser.setDialogTitle("Choose Destination Directory...");
 				
 				//allow user to select a directory to copy to
@@ -166,17 +164,13 @@ public class BackDatUp {
 				String temp = fileChooser.getSelectedFile().getAbsolutePath();
 				destPath.add(temp);
 				
-				//TODO: get user input here for backup interval/timing
-				//get calendar timing
-				//Calendar timing;
-				//display dialog
-				//JOptionPane.showMessageDialog(null, "Choose how often to backup", "Backup Interval", 1);
+				//TODO open a dialog with a selection of instant or recurring job
+					// depending on selection, Times To Repeat field is enabled/disabled
+					// when user hits "Ok" it creates a job of the specified type and adds it
 				
 				//create job
-				RecurringJob myJob = new RecurringJob(path, destPath, 1, 1);
+				InstantJob myJob = new InstantJob(path, destPath);
 				schedule.addJob(myJob);
-				
-				//TODO: save schedule to XML here?
 			}
 		});
 		
