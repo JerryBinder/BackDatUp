@@ -109,7 +109,7 @@ public class BackDatUp {
 		springLayout.putConstraint(SpringLayout.WEST, lblJobQueue, 0, SpringLayout.WEST, BackDatUp.getContentPane());
 		BackDatUp.getContentPane().add(lblJobQueue);
 		
-		//Job queue textarea
+		//Job queue text area
 		JTextPane textPane = new JTextPane();
 		springLayout.putConstraint(SpringLayout.NORTH, textPane, 5, SpringLayout.SOUTH, lblJobQueue);
 		springLayout.putConstraint(SpringLayout.WEST, textPane, 10, SpringLayout.WEST, BackDatUp.getContentPane());
@@ -119,6 +119,7 @@ public class BackDatUp {
 		
 		//setup for adding to textPane
 		Document doc = textPane.getDocument();
+		
 		//add each element of jobQueue ArrayList to the pane
 		for(String s:jobQueue) {
 			try {
@@ -136,24 +137,33 @@ public class BackDatUp {
 		btnScheduleJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//display dialog				
-				JOptionPane.showMessageDialog(null, "Choose a File/directory to Backup", "Backup a File", 1);
+				// JOptionPane.showMessageDialog(null, "Choose a File/directory to Backup", "Backup a File", 1);
+				fileChooser.setDialogTitle("Choose Source File...");
+				
 				//open the file chooser for location of file
 				fileChooser.showOpenDialog(btnScheduleJob);
+				
 				//allow user to select files and directories
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				
 				//get path and filename of file to copy
 				String path=fileChooser.getSelectedFile().getAbsolutePath();
-				String filename=fileChooser.getSelectedFile().getName();
+				//String filename=fileChooser.getSelectedFile().getName();
 				
 				//display dialog				
-				JOptionPane.showMessageDialog(null, "Choose a Backup Location", "Directory to Backup", 1);
-				//open file chooser for destination
-				fileChooser.showOpenDialog(btnScheduleJob);
+				// JOptionPane.showMessageDialog(null, "Choose a Backup Location", "Directory to Backup", 1);
+				fileChooser.setDialogTitle("Choose Destination Directory...");
+				
 				//allow user to select a directory to copy to
 				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				//get path to copy file to'
+				fileChooser.setAcceptAllFileFilterUsed(false);
+				
+				//open file chooser for destination
+				fileChooser.showOpenDialog(btnScheduleJob);
+				
+				//get path to copy file to
 				ArrayList<String> destPath = new ArrayList<String>();
-				String temp=fileChooser.getSelectedFile().getAbsolutePath();
+				String temp = fileChooser.getSelectedFile().getAbsolutePath();
 				destPath.add(temp);
 				
 				//TODO: get user input here for backup interval/timing
@@ -163,7 +173,7 @@ public class BackDatUp {
 				//JOptionPane.showMessageDialog(null, "Choose how often to backup", "Backup Interval", 1);
 				
 				//create job
-				RecurringJob myJob = new RecurringJob(path+filename, destPath, 1, 1);
+				RecurringJob myJob = new RecurringJob(path, destPath, 1, 1);
 				schedule.addJob(myJob);
 				
 				//TODO: save schedule to XML here?
