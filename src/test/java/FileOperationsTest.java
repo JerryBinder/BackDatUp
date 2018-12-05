@@ -9,8 +9,9 @@ import org.junit.Test;
 
 class FileOperationsTest {
 	
-	protected final String TEST_FILE_1 = "/test1.txt";
-	// protected final String TEST_FILE_2 = "/test2.txt";
+	protected final String TEST_FILE_1 = "./test1.txt";
+	protected final String TEST_FILE_2 = "/test2.txt";
+	protected final String TEST_FOLDER = "./test/";
 
 	FileOperations operations;
 	@Before
@@ -20,7 +21,7 @@ class FileOperationsTest {
 
 	@Test
 	void testCreateFolder() {
-		assertEquals(true, this.operations.createFolder(TEST_FILE_1));
+		assertEquals(true, this.operations.createFolder(TEST_FOLDER));
 	}
 	
 	// This only tests a String comparison. Brings coverage % up but is otherwise useless.
