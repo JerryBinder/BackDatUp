@@ -55,24 +55,11 @@ public class JobsList extends ArrayList<Job> {
 	 * Called by addJob and removeJob.
 	 */
 	private void serializeInXml(){
-		System.out.println("calling serialize");
-
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		
 		// deletes old file (if it exists) to make sure removed jobs don't sneak back in
 		File temp = new File(SERIALIZATION_PATH);
 		if(temp.exists())
 			temp.delete();
-		if(temp.exists()){
-			System.out.println("delete failed");
-			return;
-		}
-		//FileOperations.getInstance().deleteFile(SERIALIZATION_PATH);	// TODO fix this
 		
 		try{
 			// uses @XmlElement tags to create XML out of JobsList and its Jobs
@@ -91,7 +78,6 @@ public class JobsList extends ArrayList<Job> {
 		} catch(IOException | JAXBException e){
 			e.printStackTrace();
 		}
-		System.out.println("serialize done");
 	}
 	
 	/**
@@ -112,6 +98,7 @@ public class JobsList extends ArrayList<Job> {
 		StringBuffer fileContent = new StringBuffer();
 		try {
 			fr = new FileReader(SERIALIZATION_PATH);
+			@SuppressWarnings("unused")
 			int i = 0;
 			while((i = fr.read(buffer)) != -1){
 				fileContent.append(new String(buffer));

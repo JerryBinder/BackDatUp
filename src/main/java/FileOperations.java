@@ -24,8 +24,6 @@ public class FileOperations {
 		return success;
 	}
 	
-	
-	
 	/**
 	 * Deletes a file or directory. Directory must be empty to be deleted.
 	 * @param File

@@ -2,10 +2,7 @@ package main.java;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.awt.List;
 import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * Job that happens only once.
