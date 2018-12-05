@@ -40,14 +40,10 @@ public class Schedule {
 	 * @param Job
 	 * @return false if job doesn't exist, true if it was deleted
 	 */
-	public boolean deleteJob(Job job){
-		for(Job j : jobs){
-			if(job.equals(j)){
-				jobs.remove(j);
-				return true;
-			}
-		}
-		return false;
+	public boolean deleteJob(Job job, boolean deleteBackupsToo){
+		if(deleteBackupsToo)
+			job.deleteJobAndBackups();
+		return jobs.remove(job);
 	}
 	
 	/**

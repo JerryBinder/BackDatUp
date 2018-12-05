@@ -61,6 +61,6 @@ public abstract class Job {
 	/**
 	 * Deletes job, empties both sets.
 	 */
-	public abstract void deleteJob();
+	public abstract void deleteJobAndBackups();
 }
 

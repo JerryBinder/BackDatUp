@@ -69,9 +69,11 @@ public class InstantJob extends Job {
 
 
 	@Override
-	public void deleteJob() {
-		// TODO Auto-generated method stub
-		
+	public void deleteJobAndBackups() {
+		FileOperations f = FileOperations.getInstance();
+		for(String d : destinationPaths){
+			f.deleteFile(d);
+		}
 	}
 
 }
