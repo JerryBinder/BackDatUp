@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlElement;
  *
  */
 public abstract class Job {
-	File sourceFile;
-	ArrayList<String> destinationPaths;
-	Calendar timing;
+	protected File sourceFile;
+	protected ArrayList<String> destinationPaths;
+	protected Calendar timing;
 	
 	// exists to make XML loader happy - don't call it
 	Job(){}
@@ -45,6 +45,19 @@ public abstract class Job {
 	@XmlElement
 	public Calendar getTiming(){ return timing; };
 	
+	
+	public void setSourceFile(File sourceFile) {
+		this.sourceFile = sourceFile;
+	}
+
+	public void setDestinationPaths(ArrayList<String> destinationPaths) {
+		this.destinationPaths = destinationPaths;
+	}
+
+	public void setTiming(Calendar timing) {
+		this.timing = timing;
+	}
+
 	/**
 	 * Deletes job, empties both sets.
 	 */

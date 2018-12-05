@@ -59,12 +59,12 @@ public class InstantJob extends Job {
 
 	@Override
 	public void addDestination(String destination) {
-		this.destinationPaths.add(destination);
+		destinationPaths.add(destination);
 	}
 
 	@Override
 	public void removeDestination(String destination) {
-		this.destinationPaths.remove(destinationPaths.indexOf(destination));
+		destinationPaths.remove(destinationPaths.indexOf(destination));
 	}
 
 

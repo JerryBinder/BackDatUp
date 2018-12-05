@@ -29,7 +29,7 @@ public class Schedule {
 	 */
 	public void checkForDueJobs(){
 		for(Job j : jobs){
-			if(j.timing.before(Calendar.getInstance())){
+			if(j.getTiming().before(Calendar.getInstance())){
 				j.performJob();
 			}
 		}

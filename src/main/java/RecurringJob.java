@@ -13,8 +13,8 @@ import java.io.File;
  *
  */
 public class RecurringJob extends Job {
-	int interval;		// number of minutes between each recurrance
-	int timesToRepeat;	// number of times job will recur
+	private int interval;		// number of minutes between each recurrance
+	private int timesToRepeat;	// number of times job will recur
 	
 	// exists to make XML loader happy - don't call it
 	RecurringJob(){}
@@ -43,6 +43,7 @@ public class RecurringJob extends Job {
 			fileOperations.copyFile(sourceFile, path);
 		}
 		
+		// decrements timesToRepeat. If it's still > 0, it'll reset the timing as well.
 		timesToRepeat--;
 		if(timesToRepeat > 0){
 			timing.add(Calendar.MINUTE, interval);	// TODO will this loop between days? must test
@@ -69,13 +70,12 @@ public class RecurringJob extends Job {
 
 	@Override
 	public void addDestination(String destination) {
-		this.destinationPaths.add(destination);
+		destinationPaths.add(destination);
 	}
 
 	@Override
 	public void removeDestination(String destination) {
-		this.destinationPaths.remove(destinationPaths.indexOf(destination));
-		timesToRepeat--;
+		destinationPaths.remove(destinationPaths.indexOf(destination));
 	}
 
 
@@ -91,4 +91,11 @@ public class RecurringJob extends Job {
 	@XmlElement
 	public int getTimesToRepeat() { return timesToRepeat; }
 
+	public void setInterval(int interval) {
+		this.interval = interval;
+	}
+
+	public void setTimesToRepeat(int timesToRepeat) {
+		this.timesToRepeat = timesToRepeat;
+	}
 }
