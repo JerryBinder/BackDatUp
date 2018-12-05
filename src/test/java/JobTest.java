@@ -51,7 +51,7 @@ public class JobTest {
 	 * Schedule a Job
 	 */
 	@Test
-	public void addRecurringJobToList(){
+	public void testAddRecurringJobToList(){
 		assertTrue("File name should exist", file.exists());
 		
 		destinations.add("./testdestination/testR1.txt");
@@ -61,5 +61,15 @@ public class JobTest {
 		JobsList list = new JobsList(false); // false prevents JobsList from attempting to load prior version
 		list.add(job);
 		assertTrue(list.contains(job));
+	}
+	
+	@Test
+	public void testLoadingJobFromXml(){
+		
+	}
+	
+	@Test
+	public void testLoadingJobWhenNoXmlExists(){
+		
 	}
 }
