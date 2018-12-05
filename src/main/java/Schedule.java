@@ -24,7 +24,7 @@ public class Schedule {
 	}
 	
 	Schedule(){
-		jobs = new JobsList();
+		jobs = new JobsList(true);
 	}
 
 	/**

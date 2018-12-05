@@ -50,7 +50,7 @@ public class BackDatUp {
 			public void run() {
 				try {
 					BackDatUp window = new BackDatUp();
-					window.BackDatUp.setTitle("Back Dat Up (BDU) v1.0");
+					window.BackDatUp.setTitle("Back Dat Up");
 					window.BackDatUp.setVisible(true);
 					window.BackDatUp.setPreferredSize(new Dimension(640, 480));
 					window.BackDatUp.pack();
@@ -61,7 +61,7 @@ public class BackDatUp {
 						@Override
 						public void windowClosing(WindowEvent we) {
 							String ObjButtons[] = {"Yes", "No"};
-							int result = JOptionPane.showOptionDialog(null, "Scheduled jobs are only run when program is running!  Are you sure you want to quit? (Missed jobs will be run next launch)",
+							int result = JOptionPane.showOptionDialog(null, "Scheduled jobs are only run when program is running!  Are you sure you want to quit? (Missed jobs will be run next launch.)",
 									"Exit Confirmation", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
 							if(result == JOptionPane.YES_OPTION) {
 								System.exit(0);

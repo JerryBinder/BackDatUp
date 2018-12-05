@@ -21,10 +21,14 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlSeeAlso({Job.class, InstantJob.class, RecurringJob.class})
 public class JobsList extends ArrayList<Job> {
 	private static final long serialVersionUID = -4941703133518352572L;
-	protected final static String SERIALIZATION_PATH = "jobs.xml";
+	protected final static String SERIALIZATION_PATH = "./jobs.xml";
 	
-	public JobsList(){
-		addAll(loadFromXml());
+	// exists to make XML loader happy - don't call it
+	public JobsList(){}
+	
+	public JobsList(boolean shouldLoadFromFile){
+		if(shouldLoadFromFile)
+			addAll(loadFromXml());
 	}
 	
 	@XmlElement(name = "Job")
@@ -61,7 +65,14 @@ public class JobsList extends ArrayList<Job> {
 		}
 		
 		// deletes old file (if it exists) to make sure removed jobs don't sneak back in
-		FileOperations.getInstance().deleteFile(SERIALIZATION_PATH);
+		File temp = new File(SERIALIZATION_PATH);
+		if(temp.exists())
+			temp.delete();
+		if(temp.exists()){
+			System.out.println("delete failed");
+			return;
+		}
+		//FileOperations.getInstance().deleteFile(SERIALIZATION_PATH);	// TODO fix this
 		
 		try{
 			// uses @XmlElement tags to create XML out of JobsList and its Jobs
@@ -80,6 +91,7 @@ public class JobsList extends ArrayList<Job> {
 		} catch(IOException | JAXBException e){
 			e.printStackTrace();
 		}
+		System.out.println("serialize done");
 	}
 	
 	/**
@@ -89,8 +101,11 @@ public class JobsList extends ArrayList<Job> {
 	 */
 	private JobsList loadFromXml() {
 		// if XML file doesn't exist, JobsList class returns its empty self
-		if(!(new File(SERIALIZATION_PATH).exists()))
-				return this;
+		System.out.println("starting load");
+		if(!(new File(SERIALIZATION_PATH).exists())){
+			return new JobsList(false);
+		}
+		System.out.println("path doesn't exist, continuing");
 		
 		FileReader fr = null;
 		char[] buffer = new char[1024];
@@ -111,7 +126,7 @@ public class JobsList extends ArrayList<Job> {
 		try {
 			JAXBContext context = JAXBContext.newInstance(JobsList.class);
 			Unmarshaller un = context.createUnmarshaller();
-			return (JobsList)un.unmarshal(reader);
+			return (JobsList)un.unmarshal(reader);	// TODO fix nullpointerexception here
 		} catch (JAXBException e) {
 			e.printStackTrace();
 			return null;

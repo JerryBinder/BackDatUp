@@ -33,7 +33,7 @@ public class FileOperations {
 	 */
 	public boolean deleteFile(File file){
 		boolean success = false;
-		if (file.exists() && file.isFile()){
+		if (file.exists()){
 			success = file.delete();
 		}
 		return success;

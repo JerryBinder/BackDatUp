@@ -7,15 +7,15 @@ import static org.junit.Assert.assertNotEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-class HashFileUtilTest {
+public class HashFileUtilTest {
 	
 	protected final String TEST_FILE_1 = "./test1.txt";
 	protected final String TEST_FILE_2 = "./test2.txt";
 	
-	HashFileUtil hasher;
+	protected HashFileUtil hasher;
 	
 	@Before
-	void setUp() throws Exception {
+	public void setUp() throws Exception {
 		hasher = new HashFileUtil();
 	}
 
@@ -23,7 +23,7 @@ class HashFileUtilTest {
 	 * Ensures hash method generates different hashes for different files.
 	 */
 	@Test
-	void generateMd5Hashtest() {
+	public void generateMd5Hashtest() {
 		assertNotEquals(this.hasher.generateMd5Hash(TEST_FILE_1), this.hasher.generateMd5Hash(TEST_FILE_2));
 	}
 	
@@ -31,7 +31,7 @@ class HashFileUtilTest {
 	 * Ensures hash method consistently generates the same hash for the same file.
 	 */
 	@Test
-	void hashesAreConsistentTest() {
+	public void hashesAreConsistentTest() {
 		assertEquals(this.hasher.generateMd5Hash(TEST_FILE_1), this.hasher.generateMd5Hash(TEST_FILE_1));
 	}
 }

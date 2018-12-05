@@ -14,6 +14,9 @@ public abstract class Job {
 	ArrayList<String> destinationPaths;
 	Calendar timing;
 	
+	// exists to make XML loader happy - don't call it
+	Job(){}
+	
 	Job(File sourceFile, ArrayList<String> destinationPaths, Calendar timing){
 		this.sourceFile = sourceFile;
 		this.destinationPaths = destinationPaths;

@@ -14,6 +14,9 @@ import java.security.NoSuchAlgorithmException;
  */
 public class InstantJob extends Job {
 	
+	// exists to make XML loader happy - don't call it
+	InstantJob(){}
+	
 	public InstantJob(File sourceFile, ArrayList<String> destinationPaths, Calendar timing){
 		super(sourceFile, destinationPaths, timing);
 	}

@@ -16,6 +16,9 @@ public class RecurringJob extends Job {
 	int interval;		// number of minutes between each recurrance
 	int timesToRepeat;	// number of times job will recur
 	
+	// exists to make XML loader happy - don't call it
+	RecurringJob(){}
+	
 	RecurringJob(File sourceFile, ArrayList<String> destinationPaths, Calendar timing, int interval, int timesToRepeat){
 		super(sourceFile, destinationPaths, timing);
 		this.interval = interval;
