@@ -5,17 +5,14 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.Locale;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -57,19 +54,7 @@ public class BackDatUp {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {		
-					/* checks for due jobs periodically and performs them */
-					Runnable checkJobs = new Runnable() {
-					    public void run() {
-					        //System.out.println("Checking for due jobs...");
-					        Schedule.getInstance().checkForDueJobs();
-					        //System.out.println("Updating jobs table...");
-					        updateJobsTable();
-					    }
-					};
-					ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-					executor.scheduleAtFixedRate(checkJobs, 0, 3, TimeUnit.SECONDS);
-				
+				try {
 					BackDatUp window = new BackDatUp();
 					window.BackDatUp.setTitle("Back Dat Up");
 					window.BackDatUp.setVisible(true);
@@ -108,7 +93,6 @@ public class BackDatUp {
 	 */
 	protected void initialize() {
 		BackDatUp = new JFrame();
-		BackDatUp.setFocusable(true);
 		BackDatUp.setBounds(100, 100, 633, 718);
 		BackDatUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -123,7 +107,8 @@ public class BackDatUp {
 		jobsTable.setFillsViewportHeight(true);
 		BackDatUp.getContentPane().add(new JScrollPane(jobsTable));
 		
-		updateJobsTable();		
+		updateJobsTable();
+		// TODO: periodically call updateJobsTable()
 		
 		/*
 		 * Button creation
@@ -142,62 +127,31 @@ public class BackDatUp {
 		/*
 		 * Button behavior 
 		 */
-		BackDatUp.addKeyListener( new KeyListener() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
-				System.out.println("key was pressed");
-				if(e.getKeyChar() == 'a')
-				{
-					addJob(btnScheduleJob);
-					BackDatUp.requestFocus();
-					System.out.println("a was pressed");
-				}
-				else if(e.getKeyChar() == 'd')
-				{
-					deleteJob(btnDeleteJob);
-					BackDatUp.requestFocus();
-					System.out.println("d was pressed");
-				}
-				else if(e.getKeyChar() == 'e')
-				{
-					editJob(btnEditJob);
-					BackDatUp.requestFocus();
-					System.out.println("e was pressed");
-				}
-			}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-			}
-		});
 		btnScheduleJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addJob(btnScheduleJob);
-				BackDatUp.requestFocus();
 			}
 		});
 		btnDeleteJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				deleteJob(btnDeleteJob);
-				BackDatUp.requestFocus();
+				if(lastSelectedRow == -1)
+					JOptionPane.showMessageDialog(null, "No row is selected. Please select a row before pressing Delete Job.");
+				else
+					deleteJob(btnDeleteJob);
 			}
 		});
 		btnEditJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				editJob(btnEditJob);
-				BackDatUp.requestFocus();
+				if(lastSelectedRow == -1)
+					JOptionPane.showMessageDialog(null, "No row is selected. Please select a row before pressing Edit Job.");
+				else
+					editJob(btnEditJob);
 			}
 		});
 		jobsTable.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				lastSelectedRow = jobsTable.getSelectedRow();
-				BackDatUp.requestFocus();
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {}
@@ -226,11 +180,14 @@ public class BackDatUp {
 //		a[3] = "wnfawinf";
 //		jobsModel.addRow(a);
 		
+		jobsModel.setRowCount(0); // empties table
+		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:ss:mm");
+		
 		Object rowData[] = new Object[4];
 		for(Job j : Schedule.getInstance().getJobs()) {
 			rowData[0] = j.getSourceFile().toString();
 			rowData[1] = j.getDestinationPaths().get(0).toString();
-			rowData[2] = j.getTiming().toString();
+			rowData[2] = format.format(j.getTiming().getTime());
 			rowData[3] = "";
 			jobsModel.addRow(rowData);
 		}
@@ -296,6 +253,10 @@ public class BackDatUp {
 		ok.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Job myJob = null;
+				
+				// parse Calendar object
+				SimpleDateFormat sdf = new SimpleDateFormat("MM/DD HR:MN", Locale.ENGLISH));	// TODO
+				
 				if(instantJobRadio.isSelected()) {
 					myJob = new InstantJob(src, dest);
 					Schedule.getInstance().addJob(myJob);
@@ -340,22 +301,19 @@ public class BackDatUp {
 	
 	// TODO test this
 	private void deleteJob(JButton parent) {
-		if(lastSelectedRow == -1)
-			JOptionPane.showMessageDialog(null, "No row is selected. Please select a row before pressing Delete Job.");
-		else {
-			String ObjButtons[] = {"Yes", "No"};
-			int result = JOptionPane.showOptionDialog(null, "Are you sure you want to delete the selected job?",
-					"Delete Confirmation", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
-			if(result == JOptionPane.YES_OPTION) {
-				for(Job j : Schedule.getInstance().getJobs()) {
-					if(j.sourceFile.equals(jobsTable.getValueAt(lastSelectedRow, 0))
-							&& j.destinationPaths.get(0).equals(jobsTable.getValueAt(lastSelectedRow, 1))) {
-						Schedule.getInstance().deleteJob(j.sourceFile);
-					}
+		String ObjButtons[] = {"Yes", "No"};
+		int result = JOptionPane.showOptionDialog(null, "Are you sure you want to delete the selected job?",
+				"Delete Confirmation", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
+		if(result == JOptionPane.YES_OPTION) {
+			for(Job j : Schedule.getInstance().getJobs()) {
+				if(j.sourceFile.equals(jobsTable.getValueAt(lastSelectedRow, 0))
+						&& j.destinationPaths.get(0).equals(jobsTable.getValueAt(lastSelectedRow, 1))) {
+					Schedule.getInstance().deleteJob(j.sourceFile);
+					jobsModel.removeRow(lastSelectedRow);
 				}
-				updateJobsTable();
 			}
 		}
+		updateJobsTable();
 	}
 	
 	private void editJob(JButton parent) {
