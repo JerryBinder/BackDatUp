@@ -19,6 +19,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -110,6 +113,7 @@ public class BackDatUp {
 	 */
 	protected void initialize() {
 		BackDatUp = new JFrame();
+		BackDatUp.setFocusable(true);
 		BackDatUp.setBounds(100, 100, 633, 718);
 		BackDatUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -148,9 +152,42 @@ public class BackDatUp {
 		/*
 		 * Button behavior 
 		 */
+		BackDatUp.addKeyListener( new KeyListener() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				//System.out.println("key was pressed");
+				if(e.getKeyChar() == 'a')
+				{
+					addJob(btnScheduleJob);
+					BackDatUp.requestFocus();
+					//System.out.println("a was pressed");
+				}
+				else if(e.getKeyChar() == 'd')
+				{
+					deleteJob(btnDeleteJob);
+					BackDatUp.requestFocus();
+					//System.out.println("d was pressed");
+				}
+				else if(e.getKeyChar() == 'e')
+				{
+					editJob(btnEditJob);
+					BackDatUp.requestFocus();
+					//System.out.println("e was pressed");
+				}
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+			}
+ 			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+		});
 		btnScheduleJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addJob(btnScheduleJob);
+				BackDatUp.requestFocus();
 			}
 		});
 		btnDeleteJob.addActionListener(new ActionListener() {
@@ -159,6 +196,7 @@ public class BackDatUp {
 					JOptionPane.showMessageDialog(null, "No row is selected. Please select a row before pressing Delete Job.");
 				else
 					deleteJob(btnDeleteJob);
+				BackDatUp.requestFocus();
 			}
 		});
 		btnEditJob.addActionListener(new ActionListener() {
@@ -167,12 +205,14 @@ public class BackDatUp {
 					JOptionPane.showMessageDialog(null, "No row is selected. Please select a row before pressing Edit Job.");
 				else
 					editJob(btnEditJob);
+				BackDatUp.requestFocus();
 			}
 		});
 		jobsTable.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				lastSelectedRow = jobsTable.getSelectedRow();
+				BackDatUp.requestFocus();
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {}
