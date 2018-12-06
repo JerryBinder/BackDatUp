@@ -58,7 +58,7 @@ public abstract class Job {
 		this.timing = timing;
 	}
 
-	public abstract void deleteJobAndBackups();
+	public abstract void deleteBackups();
 
 	public int getTimesToRepeat() { return 0; }
 }
