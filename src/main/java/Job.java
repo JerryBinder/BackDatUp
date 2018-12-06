@@ -61,5 +61,6 @@ public abstract class Job {
 	public abstract void deleteBackups();
 
 	public int getTimesToRepeat() { return 0; }
+	public int getInterval() { return 0; }
 }
 

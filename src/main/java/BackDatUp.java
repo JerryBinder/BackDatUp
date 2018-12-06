@@ -23,9 +23,11 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -42,9 +44,9 @@ import javax.swing.table.DefaultTableModel;
  *
  */
 public class BackDatUp {
-	Object[][] tableData;
-	private JFrame BackDatUp;
-	private final JFileChooser fileChooser = new JFileChooser();
+	protected Object[][] tableData;
+	protected  JFrame BackDatUp;
+	protected final JFileChooser fileChooser = new JFileChooser();
 	
 	protected static File src;
 	protected static ArrayList<File> dest;
@@ -149,7 +151,6 @@ public class BackDatUp {
 		BackDatUp.addKeyListener( new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
 				//System.out.println("key was pressed");
 				if(e.getKeyChar() == 'a')
 				{
@@ -229,7 +230,7 @@ public class BackDatUp {
 	 *  - by job being executed
 	 */
 	protected void updateJobsTable() {
-		System.out.println("Updating jobs table...");
+		// System.out.println("Updating jobs table...");
 		jobsModel.setRowCount(0); // empties table
 		
 		Object a[] = new Object[4];
@@ -247,7 +248,7 @@ public class BackDatUp {
 			rowData[3] = j.getTimesToRepeat();
 			jobsModel.addRow(rowData);
 		}
-		System.out.println("Jobs table updated.");
+		// System.out.println("Jobs table updated.");
 	}
 	
 	private void addJob(JButton parent) {
@@ -265,21 +266,23 @@ public class BackDatUp {
 		JTextArea destText = new JTextArea();
 		destText.setEditable(false);
 		
-		
-		JButton sourceBrowse = new JButton();
-		sourceBrowse.setText("Browse for Source File...");
-		JButton destBrowse = new JButton();
-		destBrowse.setText("Browse for Destination Directory...");
-		JButton ok = new JButton();
-		ok.setText("Submit");
+		JButton sourceBrowse = new JButton("Browse for Source File...");
+		JButton destBrowse = new JButton("Browse for Destination Directory...");
+		JButton ok = new JButton("Submit");
 		
 		JRadioButton instantJobRadio = new JRadioButton();
 		instantJobRadio.setText("Instant Job");
 		JRadioButton recurringJobRadio = new JRadioButton();
 		recurringJobRadio.setText("Recurring Job");
+		ButtonGroup bg = new ButtonGroup();
+		bg.add(instantJobRadio);
+		bg.add(recurringJobRadio);
 		
-		JTextArea intervalText = new JTextArea("Interval (Minutes)");
-		JTextArea timesToRepeatText = new JTextArea("Times To Repeat");
+		JLabel intervalLabel = new JLabel("Interval (Minutes): ");
+		JTextArea intervalText = new JTextArea("0");
+		JLabel timesToRepeatLabel = new JLabel("Times To Repeat: ");
+		JTextArea timesToRepeatText = new JTextArea("0");
+		JLabel timingLabel = new JLabel("Time: ");
 		JTextArea timingText = new JTextArea(sdf.format(Calendar.getInstance().getTime()));
 		
 		sourceBrowse.addActionListener(new ActionListener() {
@@ -344,14 +347,14 @@ public class BackDatUp {
 		});
 		instantJobRadio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(instantJobRadio.isSelected())
-					recurringJobRadio.setSelected(false);
+				intervalText.setEnabled(false);
+				timesToRepeatText.setEnabled(false);
 			}
 		});
 		recurringJobRadio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(recurringJobRadio.isSelected())
-					instantJobRadio.setSelected(false);
+				intervalText.setEnabled(true);
+				timesToRepeatText.setEnabled(true);
 			}
 		});
 		
@@ -363,8 +366,11 @@ public class BackDatUp {
 		panel.add(ok);
 		panel.add(instantJobRadio);
 		panel.add(recurringJobRadio);
+		panel.add(intervalLabel);
 		panel.add(intervalText);
+		panel.add(timingLabel);
 		panel.add(timingText);
+		panel.add(timesToRepeatLabel);
 		panel.add(timesToRepeatText);
 		
 		frame.setVisible(true);
@@ -390,22 +396,62 @@ public class BackDatUp {
 	}
 	
 	private void editJob(JButton parent) {
-		JFrame frame = new JFrame("Edit Job");
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		JPanel panel = new JPanel();
-		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		panel.setPreferredSize(new Dimension(500, 250));
-		frame.setPreferredSize(new Dimension(500, 250));
-		frame.setLocationRelativeTo(parent);
-		frame.pack();
-		frame.setVisible(true);
-		
-		for(Job j : Schedule.getInstance().getJobs()) {
-			if(j.sourceFile.equals(jobsTable.getValueAt(lastSelectedRow, 0))
-					&& j.destinationPaths.get(0).equals(jobsTable.getValueAt(lastSelectedRow, 1))) {
-				// TODO: open editor panel
-				updateJobsTable();
-			}
-		}
+//		JFrame frame = new JFrame("Edit Job");
+//		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//		JPanel panel = new JPanel();
+//		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+//		panel.setPreferredSize(new Dimension(500, 250));
+//		frame.setPreferredSize(new Dimension(500, 250));
+//		frame.setLocationRelativeTo(parent);
+//		frame.pack();
+//		frame.setVisible(true);
+//		
+//		// TODO copy browse buttons + their behavior from addjob
+//		
+//		JLabel timingLabel = new JLabel("Timing: ");
+//		JTextArea timingText = new JTextArea("TIMING NOT FOUND");
+//		JLabel intervalLabel = new JLabel("Interval: ");
+//		JTextArea intervalText = new JTextArea("0");
+//		JLabel timesToRepeatLabel = new JLabel("Times to Repeat: ");
+//		JTextArea timesToRepeatText = new JTextArea("0");
+//		
+//		JTextArea sourceText = new JTextArea();
+//		sourceText.setEditable(false);
+//		JTextArea destText = new JTextArea();
+//		destText.setEditable(false);
+//		
+//		JButton sourceBrowse = new JButton("Browse for Source File...");
+//		JButton destBrowse = new JButton("Browse for Destination Directory...");
+//		JButton ok = new JButton("Submit");
+//		JButton cancel = new JButton("Cancel");
+//		
+//		frame.add(panel);
+//		panel.add(sourceText);
+//		panel.add(sourceBrowse);
+//		panel.add(destText);
+//		panel.add(destBrowse);
+//		panel.add(timingLabel);
+//		panel.add(timingText);
+//		panel.add(ok);
+//		panel.add(cancel);
+//		
+//		for(Job j : Schedule.getInstance().getJobs()) {
+//			if(j.sourceFile.equals(jobsTable.getValueAt(lastSelectedRow, 0))
+//					&& j.destinationPaths.get(0).equals(jobsTable.getValueAt(lastSelectedRow, 1))) {
+//				sourceText.setText(j.getSourceFile().toString());
+//				destText.setText(j.getDestinationPaths().get(0).toString());
+//				timingText.setText(sdf.format(j.getTiming().getTime()));
+//				if(j instanceof RecurringJob){
+//					panel.add(intervalLabel);
+//					panel.add(intervalText);
+//					panel.add(timesToRepeatLabel);
+//					panel.add(timesToRepeatText);
+//					intervalText.setText(""+j.getInterval());
+//					timesToRepeatText.setText(""+j.getTimesToRepeat());
+//				}
+//			}
+//		}
+//		
+//		frame.setVisible(true);
 	}
 }

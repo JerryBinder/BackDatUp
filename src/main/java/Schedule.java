@@ -28,20 +28,20 @@ public class Schedule {
 	 * Iterates through list of jobs. Calls performJob() on all that are due.
 	 */
 	public void checkForDueJobs(){
-		System.out.println("Checking for due jobs...");
+		// System.out.println("Checking for due jobs...");
 		for(Job j : jobs){
 			if(j.getTiming().before(Calendar.getInstance())){
-				System.out.println("Performing job: " + j.toString());
+				// System.out.println("Performing job: " + j.toString());
 				j.performJob();
 				if(j.getTimesToRepeat() <= 0){
 					jobs.remove(j);
 					jobs.serializeInXml();
-					System.out.println("Removing expired job: " + j.destinationPaths.get(0).toString() + "\n" + j.getTiming().getTime().toString());
+					// System.out.println("Removing expired job: " + j.destinationPaths.get(0).toString() + "\n" + j.getTiming().getTime().toString());
 				}	
 			}
 		}
 		jobs.serializeInXml();
-		System.out.println("Done checking for due jobs.");
+		// System.out.println("Done checking for due jobs.");
 	}
 	
 	/**

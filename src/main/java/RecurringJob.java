@@ -82,6 +82,7 @@ public class RecurringJob extends Job {
 	}
 	
 	@XmlElement
+	@Override
 	public int getInterval() { return interval; }
 	
 	@XmlElement
