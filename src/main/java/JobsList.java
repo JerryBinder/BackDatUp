@@ -122,7 +122,7 @@ public class JobsList extends ArrayList<Job> {
 		try {
 			JAXBContext context = JAXBContext.newInstance(JobsList.class);
 			Unmarshaller un = context.createUnmarshaller();
-			return (JobsList)un.unmarshal(reader);	// TODO fix nullpointerexception here
+			return (JobsList)un.unmarshal(reader);	// TODO fix nullpointerexception here, probably not reading it correctly
 		} catch (JAXBException e) {
 			e.printStackTrace();
 			return null;

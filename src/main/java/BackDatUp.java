@@ -1,27 +1,25 @@
 package main.java;
 
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import java.awt.Dimension;
-
-import javax.swing.JTextPane;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
-import java.awt.event.ActionEvent;
-import javax.swing.JLabel;
-import javax.swing.JFileChooser;
-import java.awt.Label;
+
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 
 /**
  * Main BackDatUp.java class
@@ -34,6 +32,10 @@ public class BackDatUp {
 	Object[][] tableData;
 	private JFrame BackDatUp;
 	private final JFileChooser fileChooser = new JFileChooser();
+	
+	protected static File src;
+	protected static ArrayList<String> dest;
+	protected static JTable jobsTable;
 
 	/**
 	 * Launch the application.
@@ -45,7 +47,7 @@ public class BackDatUp {
 					BackDatUp window = new BackDatUp();
 					window.BackDatUp.setTitle("Back Dat Up");
 					window.BackDatUp.setVisible(true);
-					window.BackDatUp.setPreferredSize(new Dimension(640, 480));
+					window.BackDatUp.setPreferredSize(new Dimension(600, 500));
 					window.BackDatUp.pack();
 					window.BackDatUp.setResizable(false);
 					window.BackDatUp.setLocationRelativeTo(null);
@@ -78,122 +80,195 @@ public class BackDatUp {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	protected void initialize() {
 		BackDatUp = new JFrame();
-		BackDatUp.setBounds(100, 100, 709, 566);
+		BackDatUp.setBounds(100, 100, 633, 718);
 		BackDatUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		BackDatUp.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
+		/*
+		 * Table creation
+		 */
 		tableData = new Object[][] {};
 		String[] columns = {"Source:",
 				"Destination:",
 				"Next Backup:",
 				"Repetitions:"};
-		JTable jobsTable = new JTable(tableData, columns);
-		JScrollPane scrollPane = new JScrollPane(jobsTable);
+		BackDatUp.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		jobsTable = new JTable(tableData, columns);
 		jobsTable.setFillsViewportHeight(true);
-		BackDatUp.getContentPane().add(scrollPane);
+		BackDatUp.getContentPane().add(new JScrollPane(jobsTable));
 		
+		// TODO: periodically call updateJobsTable()
+		
+		/*
+		 * Button creation
+		 */
 		JPanel buttonPanel = new JPanel();
 		BackDatUp.getContentPane().add(buttonPanel);
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 		
-		//display backups button
-		JButton btnDisplayBackups = new JButton("Display Backups");		
-		buttonPanel.add(btnDisplayBackups);
-		
-//		//setup for adding to textPane
-//		Document doc = textPane.getDocument();
-//		
-//		//add each element of jobQueue ArrayList to the pane
-//		for(String s:jobQueue) {
-//			try {
-//				doc.insertString(doc.getLength(), s, null);
-//				doc.insertString(doc.getLength(), "\n", null);
-//			} catch (BadLocationException e) {
-//				e.printStackTrace();
-//			}
-//		}
-		
-		//schedule job button
-		JButton btnScheduleJob = new JButton("Schedule a job");
+		JButton btnScheduleJob = new JButton("Add Job");
 		buttonPanel.add(btnScheduleJob);
-		
-		//delete a job button
-		JButton btnDeleteJob = new JButton("Delete a job");
+		JButton btnDeleteJob = new JButton("Delete Job");
 		buttonPanel.add(btnDeleteJob);
-		
-		//edit a job button
-		JButton btnEditJob = new JButton("Edit a job");
+		JButton btnEditJob = new JButton("Edit Job");
 		buttonPanel.add(btnEditJob);
-		btnEditJob.addActionListener(new ActionListener() {
+		
+		/*
+		 * Button behavior 
+		 */
+		btnScheduleJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "TODO: Add edit ? select from job list in text area or separate popup?", "edit item from job list", 1);
+				addJob(btnScheduleJob);
 			}
 		});
 		btnDeleteJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "TODO: Add delete ? select from job list in text area or separate popup?", "delete item from job list", 1);
+				deleteJob(btnDeleteJob);
 			}
 		});
-		btnScheduleJob.addActionListener(new ActionListener() {
+		btnEditJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JPanel scheduler = new JPanel();
-				scheduler.add(new JLabel("Source file:"));
-				//display dialog
-				fileChooser.setDialogTitle("Choose Source File...");
-				
-				//open the file chooser for location of file
-				fileChooser.showOpenDialog(btnScheduleJob);
-				
-				//allow user to select files and directories
-				fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-				
-				//get path and filename of file to copy
-				// String path = fileChooser.getSelectedFile().getAbsolutePath();
-				File file = fileChooser.getSelectedFile();
-				// String filename=fileChooser.getSelectedFile().getName();
-				
-				//display dialog
-				fileChooser.setDialogTitle("Choose Destination Directory...");
-				
-				//allow user to select a directory to copy to
-				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				fileChooser.setAcceptAllFileFilterUsed(false);
-				
-				//open file chooser for destination
-				fileChooser.showOpenDialog(btnScheduleJob);
-				
-				//get path to copy file to
-				ArrayList<String> destPath = new ArrayList<String>();
-				String temp = fileChooser.getSelectedFile().getAbsolutePath();
-				destPath.add(temp);
-				
-				//TODO open a dialog with a selection of instant or recurring job
-					// depending on selection, Times To Repeat field is enabled/disabled
-					// when user hits "Ok" it creates a job of the specified type and adds it
-				
-				//create job
-				InstantJob myJob = new InstantJob(file, destPath);
-				Schedule.getInstance().addJob(myJob);
+				editJob(btnEditJob);
 			}
 		});
-		btnDisplayBackups.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//display all backup locations
-				JOptionPane.showMessageDialog(null, "TODO: Add backup locations", "backup locations", 1);
-			}
-		});
-		
 	}
+	
 	/**
 	 * Updates JList with the current list of Jobs.
 	 * Called whenever the list is updated:
 	 * 	- by adding a job
 	 * 	- by removing a job
 	 *  - by editing a job
+	 *  - by job being executed
 	 */
-	private void updateJobsList() {
+	private void updateJobsTable() {
 		
 	}
+	
+	
+	
+	private void addJob(JButton parent) {
+		JFrame frame = new JFrame("Schedule a Job");
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		JPanel panel = new JPanel();
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		panel.setPreferredSize(new Dimension(500, 250));
+		frame.setPreferredSize(new Dimension(500, 250));
+		frame.pack();
+		
+		JTextArea sourceText = new JTextArea();
+		sourceText.setEditable(false);
+		JTextArea destText = new JTextArea();
+		destText.setEditable(false);
+		
+		
+		JButton sourceBrowse = new JButton();
+		sourceBrowse.setText("Browse for Source File...");
+		JButton destBrowse = new JButton();
+		destBrowse.setText("Browse for Destination Directory...");
+		JButton ok = new JButton();
+		ok.setText("Submit");
+		
+		JRadioButton instantJobRadio = new JRadioButton();
+		instantJobRadio.setText("Instant Job");
+		JRadioButton recurringJobRadio = new JRadioButton();
+		recurringJobRadio.setText("Recurring Job");
+		
+		JTextArea intervalText = new JTextArea("Interval (Minutes)");
+		JTextArea timesToRepeatText = new JTextArea("Times To Repeat");
+		JTextArea timingText = new JTextArea("MM/DD HR:MN");	// TODO 
+		
+		sourceBrowse.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				fileChooser.setDialogTitle("Choose Source File...");
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				
+				fileChooser.showOpenDialog(sourceBrowse);
+				
+				src = fileChooser.getSelectedFile();
+				sourceText.setText(src.toString());
+			}
+		});
+		destBrowse.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				fileChooser.setDialogTitle("Choose Destination Directory...");
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				fileChooser.setAcceptAllFileFilterUsed(false);
+				
+				fileChooser.showOpenDialog(destBrowse);
+				
+				dest = new ArrayList<String>();
+				String temp = fileChooser.getSelectedFile().getAbsolutePath() + "\\" + src.getName();
+				dest.add(temp);
+				destText.setText(temp.toString());
+			}
+		});
+		ok.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Job myJob = null;
+				if(instantJobRadio.isSelected()) {
+					myJob = new InstantJob(src, dest);
+					Schedule.getInstance().addJob(myJob);
+				} else if(recurringJobRadio.isSelected()) {
+					// TODO
+					// myJob = new RecurringJob(src, dest, timing, interval, timesToRepeat);
+					// Schedule.getInstance().addJob(myJob);
+				}
+				
+				src = null;
+				dest = null;
+			}
+		});
+		instantJobRadio.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(instantJobRadio.isSelected())
+					recurringJobRadio.setSelected(false);
+			}
+		});
+		recurringJobRadio.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(recurringJobRadio.isSelected())
+					instantJobRadio.setSelected(false);
+			}
+		});
+		
+		frame.add(panel);
+		panel.add(sourceText);
+		panel.add(sourceBrowse);
+		panel.add(destText);
+		panel.add(destBrowse);
+		panel.add(ok);
+		panel.add(instantJobRadio);
+		panel.add(recurringJobRadio);
+		panel.add(intervalText);
+		panel.add(timingText);
+		panel.add(timesToRepeatText);
+		
+		frame.setVisible(true);
+	}
+	
+	private void deleteJob(JButton parent) {
+		String ObjButtons[] = {"Yes", "No"};
+		int result = JOptionPane.showOptionDialog(null, "Are you sure you want to delete the selected job?",
+				"Delete Confirmation", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
+		if(result == JOptionPane.YES_OPTION) {
+			// TODO: refer to selected job, find it in jobslist, and delete it
+		}
+	}
+	
+	private void editJob(JButton parent) {
+		JFrame frame = new JFrame("Schedule a Job");
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		JPanel panel = new JPanel();
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		panel.setPreferredSize(new Dimension(500, 250));
+		frame.setPreferredSize(new Dimension(500, 250));
+		frame.pack();
+		
+		// TODO: fetch selected job
+		// Job temp = JTable.selectedRow
+	}
 }
+
+
