@@ -19,13 +19,13 @@ public class RecurringJob extends Job {
 	// exists to make XML loader happy - don't call it
 	RecurringJob(){}
 	
-	RecurringJob(File sourceFile, ArrayList<String> destinationPaths, Calendar timing, int interval, int timesToRepeat){
+	public RecurringJob(File sourceFile, ArrayList<String> destinationPaths, Calendar timing, int interval, int timesToRepeat){
 		super(sourceFile, destinationPaths, timing);
 		this.interval = interval;
 		this.timesToRepeat = timesToRepeat;
 	}
 	
-	RecurringJob(File sourceFile, ArrayList<String> destinationPaths, int interval, int timesToRepeat){
+	public RecurringJob(File sourceFile, ArrayList<String> destinationPaths, int interval, int timesToRepeat){
 		this(sourceFile, destinationPaths, Calendar.getInstance(), interval, timesToRepeat);
 	}
 
@@ -46,7 +46,7 @@ public class RecurringJob extends Job {
 		// decrements timesToRepeat. If it's still > 0, it'll reset the timing as well.
 		timesToRepeat--;
 		if(timesToRepeat > 0){
-			timing.add(Calendar.MINUTE, interval);	// TODO will this loop between days? must test
+			timing.add(Calendar.MINUTE, interval);
 		}
 		
 		return this.verifyCompletion();

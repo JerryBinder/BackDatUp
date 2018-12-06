@@ -58,9 +58,6 @@ public abstract class Job {
 		this.timing = timing;
 	}
 
-	/**
-	 * Deletes job, empties both sets.
-	 */
 	public abstract void deleteJobAndBackups();
 }
 

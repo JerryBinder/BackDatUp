@@ -17,6 +17,15 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
+/**
+ * Subclass of ArayList that contains Jobs.
+ * Automatically creates XML file containing its contents
+ * whenever a Job is added or removed.
+ * Contains a public static method to read those XML files
+ * into a JobsList object.
+ * @author jarre
+ *
+ */
 @XmlRootElement
 @XmlSeeAlso({Job.class, InstantJob.class, RecurringJob.class})
 public class JobsList extends ArrayList<Job> {
@@ -85,7 +94,7 @@ public class JobsList extends ArrayList<Job> {
 	 * @param serializationPath
 	 * @return Schedule
 	 */
-	private JobsList loadFromXml() {
+	public static JobsList loadFromXml() {
 		// if XML file doesn't exist, JobsList class returns its empty self
 		System.out.println("starting load");
 		if(!(new File(SERIALIZATION_PATH).exists())){
