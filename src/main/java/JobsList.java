@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  * whenever a Job is added or removed.
  * Contains a public static method to read those XML files
  * into a JobsList object.
- * @author jarre
+ * @author Jerry Binder
  *
  */
 @XmlRootElement

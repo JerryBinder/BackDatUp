@@ -1,31 +1,27 @@
 package main.java;
 
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.Dimension;
 
 import javax.swing.JTextPane;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
-import javax.swing.SpringLayout;
 import javax.swing.JFileChooser;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.JList;
-import javax.swing.ListSelectionModel;
 import java.awt.Label;
+import javax.swing.BoxLayout;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 /**
  * Main BackDatUp.java class
@@ -35,11 +31,8 @@ import java.awt.Label;
  *
  */
 public class BackDatUp {
-
+	Object[][] tableData;
 	private JFrame BackDatUp;
-	/**
-	 * @wbp.nonvisual location=14,549
-	 */
 	private final JFileChooser fileChooser = new JFileChooser();
 
 	/**
@@ -86,55 +79,67 @@ public class BackDatUp {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		// Schedule schedule = new Schedule();
-		
-		//ArrayList of jobQueue
-		ArrayList<String> jobQueue = new ArrayList<>();
-		
-		//test variables
-		jobQueue.add("Anything added to the jobQueue ArrayList will be displayed here...");
-		jobQueue.add("Job 1: Scheduled for 12/12/18 14:30");
-		jobQueue.add("Job 2: Scheduled for 12/13/18 10:22");
-		
 		BackDatUp = new JFrame();
-		BackDatUp.setBounds(100, 100, 832, 518);
+		BackDatUp.setBounds(100, 100, 709, 566);
 		BackDatUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		SpringLayout springLayout = new SpringLayout();
-		BackDatUp.getContentPane().setLayout(springLayout);
+		BackDatUp.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		//Job queue label
-		JLabel lblJobQueue = new JLabel("Job Queue:");
-		springLayout.putConstraint(SpringLayout.NORTH, lblJobQueue, 0, SpringLayout.NORTH, BackDatUp.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, lblJobQueue, 0, SpringLayout.WEST, BackDatUp.getContentPane());
-		BackDatUp.getContentPane().add(lblJobQueue);
+		tableData = new Object[][] {};
+		String[] columns = {"Source:",
+				"Destination:",
+				"Next Backup:",
+				"Repetitions:"};
+		JTable jobsTable = new JTable(tableData, columns);
+		JScrollPane scrollPane = new JScrollPane(jobsTable);
+		jobsTable.setFillsViewportHeight(true);
+		BackDatUp.getContentPane().add(scrollPane);
 		
-		//Job queue text area
-		JTextPane textPane = new JTextPane();
-		springLayout.putConstraint(SpringLayout.NORTH, textPane, 5, SpringLayout.SOUTH, lblJobQueue);
-		springLayout.putConstraint(SpringLayout.WEST, textPane, 10, SpringLayout.WEST, BackDatUp.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, textPane, 275, SpringLayout.NORTH, BackDatUp.getContentPane());
-		textPane.setEditable(false);
-		BackDatUp.getContentPane().add(textPane);
+		JPanel buttonPanel = new JPanel();
+		BackDatUp.getContentPane().add(buttonPanel);
+		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 		
-		//setup for adding to textPane
-		Document doc = textPane.getDocument();
+		//display backups button
+		JButton btnDisplayBackups = new JButton("Display Backups");		
+		buttonPanel.add(btnDisplayBackups);
 		
-		//add each element of jobQueue ArrayList to the pane
-		for(String s:jobQueue) {
-			try {
-				doc.insertString(doc.getLength(), s, null);
-				doc.insertString(doc.getLength(), "\n", null);
-			} catch (BadLocationException e) {
-				e.printStackTrace();
-			}
-		}
+//		//setup for adding to textPane
+//		Document doc = textPane.getDocument();
+//		
+//		//add each element of jobQueue ArrayList to the pane
+//		for(String s:jobQueue) {
+//			try {
+//				doc.insertString(doc.getLength(), s, null);
+//				doc.insertString(doc.getLength(), "\n", null);
+//			} catch (BadLocationException e) {
+//				e.printStackTrace();
+//			}
+//		}
 		
 		//schedule job button
 		JButton btnScheduleJob = new JButton("Schedule a job");
+		buttonPanel.add(btnScheduleJob);
 		
-		springLayout.putConstraint(SpringLayout.WEST, btnScheduleJob, -187, SpringLayout.EAST, BackDatUp.getContentPane());
+		//delete a job button
+		JButton btnDeleteJob = new JButton("Delete a job");
+		buttonPanel.add(btnDeleteJob);
+		
+		//edit a job button
+		JButton btnEditJob = new JButton("Edit a job");
+		buttonPanel.add(btnEditJob);
+		btnEditJob.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "TODO: Add edit ? select from job list in text area or separate popup?", "edit item from job list", 1);
+			}
+		});
+		btnDeleteJob.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "TODO: Add delete ? select from job list in text area or separate popup?", "delete item from job list", 1);
+			}
+		});
 		btnScheduleJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				JPanel scheduler = new JPanel();
+				scheduler.add(new JLabel("Source file:"));
 				//display dialog
 				fileChooser.setDialogTitle("Choose Source File...");
 				
@@ -147,7 +152,7 @@ public class BackDatUp {
 				//get path and filename of file to copy
 				// String path = fileChooser.getSelectedFile().getAbsolutePath();
 				File file = fileChooser.getSelectedFile();
-				String filename=fileChooser.getSelectedFile().getName();
+				// String filename=fileChooser.getSelectedFile().getName();
 				
 				//display dialog
 				fileChooser.setDialogTitle("Choose Destination Directory...");
@@ -173,61 +178,22 @@ public class BackDatUp {
 				Schedule.getInstance().addJob(myJob);
 			}
 		});
-		
-		//display backups button
-		JButton btnDisplayBackups = new JButton("Display Backups");		
-		springLayout.putConstraint(SpringLayout.EAST, textPane, -51, SpringLayout.WEST, btnDisplayBackups);
 		btnDisplayBackups.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//display all backup locations
 				JOptionPane.showMessageDialog(null, "TODO: Add backup locations", "backup locations", 1);
 			}
 		});
-		springLayout.putConstraint(SpringLayout.NORTH, btnScheduleJob, 6, SpringLayout.SOUTH, btnDisplayBackups);
-		springLayout.putConstraint(SpringLayout.EAST, btnScheduleJob, 0, SpringLayout.EAST, btnDisplayBackups);
-		springLayout.putConstraint(SpringLayout.EAST, btnDisplayBackups, -39, SpringLayout.EAST, BackDatUp.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, btnDisplayBackups, -187, SpringLayout.EAST, BackDatUp.getContentPane());
-		springLayout.putConstraint(SpringLayout.NORTH, btnDisplayBackups, 19, SpringLayout.NORTH, BackDatUp.getContentPane());
-		BackDatUp.getContentPane().add(btnDisplayBackups);
-		BackDatUp.getContentPane().add(btnScheduleJob);
 		
-		//delete a job button
-		JButton btnDeleteJob = new JButton("Delete a job");
-		springLayout.putConstraint(SpringLayout.NORTH, btnDeleteJob, 6, SpringLayout.SOUTH, btnScheduleJob);
-		springLayout.putConstraint(SpringLayout.WEST, btnDeleteJob, -187, SpringLayout.EAST, BackDatUp.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, btnDeleteJob, 0, SpringLayout.EAST, btnDisplayBackups);
-		btnDeleteJob.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "TODO: Add delete ? select from job list in text area or separate popup?", "delete item from job list", 1);
-			}
-		});
-		BackDatUp.getContentPane().add(btnDeleteJob);
-		
-		//edit a job button
-		JButton btnEditJob = new JButton("Edit a job");
-		springLayout.putConstraint(SpringLayout.NORTH, btnEditJob, 6, SpringLayout.SOUTH, btnDeleteJob);
-		springLayout.putConstraint(SpringLayout.WEST, btnEditJob, -187, SpringLayout.EAST, BackDatUp.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, btnEditJob, 0, SpringLayout.EAST, btnDisplayBackups);
-		btnEditJob.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "TODO: Add edit ? select from job list in text area or separate popup?", "edit item from job list", 1);
-			}
-		});
-		BackDatUp.getContentPane().add(btnEditJob);
-		
-		JTextPane textPane_1 = new JTextPane();
-		springLayout.putConstraint(SpringLayout.NORTH, textPane_1, 327, SpringLayout.NORTH, BackDatUp.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, textPane_1, 10, SpringLayout.WEST, BackDatUp.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, textPane_1, -10, SpringLayout.SOUTH, BackDatUp.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, textPane_1, -238, SpringLayout.EAST, BackDatUp.getContentPane());
-		BackDatUp.getContentPane().add(textPane_1);
-		
-		Label label = new Label("Console:");
-		springLayout.putConstraint(SpringLayout.NORTH, label, 17, SpringLayout.SOUTH, textPane);
-		springLayout.putConstraint(SpringLayout.WEST, label, 9, SpringLayout.WEST, lblJobQueue);
-		springLayout.putConstraint(SpringLayout.SOUTH, label, -6, SpringLayout.NORTH, textPane_1);
-		springLayout.putConstraint(SpringLayout.EAST, label, 0, SpringLayout.EAST, lblJobQueue);
-		BackDatUp.getContentPane().add(label);
+	}
+	/**
+	 * Updates JList with the current list of Jobs.
+	 * Called whenever the list is updated:
+	 * 	- by adding a job
+	 * 	- by removing a job
+	 *  - by editing a job
+	 */
+	private void updateJobsList() {
 		
 	}
 }
