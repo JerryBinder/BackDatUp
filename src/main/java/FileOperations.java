@@ -46,20 +46,15 @@ public class FileOperations {
 	 * @param file
 	 * @param destination
 	 */
-	public void copyFile(File file, String destination){
+	public void copyFile(File file, File destination){
 		try 
 		{
-			File target = new File(destination);
-			Files.copy(file.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+			Files.copy(file.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		}
 		catch (IOException e) 
 		{
 			e.printStackTrace();
 		}
-	}
-	
-	public void copyFile(String path, String destination){
-		copyFile(new File(path), destination);
 	}
 	
 	public boolean compareHashes(String hash1, String hash2){

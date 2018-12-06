@@ -14,11 +14,11 @@ public class InstantJob extends Job {
 	// exists to make XML loader happy - don't call it
 	InstantJob(){}
 	
-	public InstantJob(File sourceFile, ArrayList<String> destinationPaths, Calendar timing){
+	public InstantJob(File sourceFile, ArrayList<File> destinationPaths, Calendar timing){
 		super(sourceFile, destinationPaths, timing);
 	}
 	
-	public InstantJob(File sourceFile, ArrayList<String> destinationPaths){
+	public InstantJob(File sourceFile, ArrayList<File> destinationPaths){
 		this(sourceFile, destinationPaths, Calendar.getInstance());
 	}
 
@@ -26,13 +26,8 @@ public class InstantJob extends Job {
 	public boolean performJob() {
 		File f;
 		FileOperations fileOperations = FileOperations.getInstance();
-		for(String path : destinationPaths)
+		for(File path : destinationPaths)
 		{
-			f = new File(path);
-			if(f.exists() == false)
-			{
-				fileOperations.createFolder(path);
-			}
 			fileOperations.copyFile(sourceFile, path);
 		}
 		return this.verifyCompletion();
@@ -44,8 +39,8 @@ public class InstantJob extends Job {
 		String destinationHash;
 		// List failedDestinations = new List();	// contains paths of all destinations that don't have the current file
 		
-		for(String d : destinationPaths){
-			destinationHash = hfu.generateMd5Hash(d);
+		for(File f : destinationPaths){
+			destinationHash = hfu.generateMd5Hash(f);
 			if(sourceHash != destinationHash){
 				// failedDestinations.add(d);
 				return false;
@@ -55,12 +50,12 @@ public class InstantJob extends Job {
 	}
 
 	@Override
-	public void addDestination(String destination) {
+	public void addDestination(File destination) {
 		destinationPaths.add(destination);
 	}
 
 	@Override
-	public void removeDestination(String destination) {
+	public void removeDestination(File destination) {
 		destinationPaths.remove(destinationPaths.indexOf(destination));
 	}
 
@@ -68,7 +63,7 @@ public class InstantJob extends Job {
 	@Override
 	public void deleteBackups() {
 		FileOperations f = FileOperations.getInstance();
-		for(String d : destinationPaths){
+		for(File d : destinationPaths){
 			f.deleteFile(d);
 		}
 	}

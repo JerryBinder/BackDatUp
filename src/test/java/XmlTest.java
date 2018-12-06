@@ -22,7 +22,7 @@ public class XmlTest {
 	protected final String DEST_4 = "./4.txt";
 	protected final static String SERIALIZATION_PATH = "./jobs.xml";
 	
-	protected ArrayList<String> destinations;
+	protected ArrayList<File> destinations;
 	protected JobsList jobs;
 	protected Calendar timing;
 	
@@ -34,20 +34,20 @@ public class XmlTest {
 	public void setup(){
 		jobs = new JobsList();
 		timing = Calendar.getInstance();
-		destinations = new ArrayList<String>();
+		destinations = new ArrayList<File>();
 	}
 	
 	@Test
 	public void testSaveToXml(){
-		destinations.add(DEST_1);
-		destinations.add(DEST_2);
+		destinations.add(new File(DEST_1));
+		destinations.add(new File(DEST_2));
 		
 		timing.add(Calendar.SECOND, 30);
 		jobs.add(new InstantJob(new File(TEST_FILE_1), destinations, timing));
 		
 		destinations.clear();
-		destinations.add(DEST_3);
-		destinations.add(DEST_4);
+		destinations.add(new File(DEST_3));
+		destinations.add(new File(DEST_4));
 		
 		timing.add(Calendar.SECOND, 30);
 		jobs.add(new RecurringJob(new File(TEST_FILE_2), destinations, timing, 1, 5));
