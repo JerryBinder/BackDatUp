@@ -16,12 +16,12 @@ import main.java.JobsList;
 public class JobTest {
 	protected final String TEST_FILE_1 = "./test1.txt";
 	
-	protected ArrayList<String> destinations;
+	protected ArrayList<File> destinations;
 	protected File file;
 	
 	@Before
 	public void setup(){
-		destinations = new ArrayList<String>();
+		destinations = new ArrayList<File>();
 		file = new File(TEST_FILE_1);
 	}
 	
@@ -35,8 +35,8 @@ public class JobTest {
 	public void testAddInstantJobToList(){
 		assertTrue("File name should exist", file.exists());
 		
-		destinations.add("./testdestination/testI1.txt");
-		destinations.add("./testdestination/testI2.txt");
+		destinations.add(new File("./testdestination/testI1.txt"));
+		destinations.add(new File("./testdestination/testI2.txt"));
 		
 		Job job = new InstantJob(file, destinations);
 		JobsList list = new JobsList(false); // false prevents JobsList from attempting to load prior version
@@ -54,8 +54,8 @@ public class JobTest {
 	public void testAddRecurringJobToList(){
 		assertTrue("File name should exist", file.exists());
 		
-		destinations.add("./testdestination/testR1.txt");
-		destinations.add("./testdestination/testR2.txt");
+		destinations.add(new File("./testdestination/testR1.txt"));
+		destinations.add(new File("./testdestination/testR2.txt"));
 		
 		Job job = new InstantJob(file, destinations);
 		JobsList list = new JobsList(false); // false prevents JobsList from attempting to load prior version

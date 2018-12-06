@@ -11,19 +11,19 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public abstract class Job {
 	protected File sourceFile;
-	protected ArrayList<String> destinationPaths;
+	protected ArrayList<File> destinationPaths;
 	protected Calendar timing;
 	
 	// exists to make XML loader happy - don't call it
 	Job(){}
 	
-	Job(File sourceFile, ArrayList<String> destinationPaths, Calendar timing){
+	Job(File sourceFile, ArrayList<File> destinationPaths, Calendar timing){
 		this.sourceFile = sourceFile;
 		this.destinationPaths = destinationPaths;
 		this.timing = timing;
 	}
 	
-	Job(String sourceFile, ArrayList<String> destinationPaths, Calendar timing){
+	Job(String sourceFile, ArrayList<File> destinationPaths, Calendar timing){
 		this(new File(sourceFile), destinationPaths, timing);
 	}
 	
@@ -33,14 +33,14 @@ public abstract class Job {
 	 */
 	public abstract boolean performJob();
 	
-	public abstract void addDestination(String destination);
-	public abstract void removeDestination(String destination);
+	public abstract void addDestination(File destination);
+	public abstract void removeDestination(File destination);
 	
 	@XmlElement
 	public File getSourceFile(){ return sourceFile; };
 	
 	@XmlElement
-	public ArrayList<String> getDestinationPaths(){ return destinationPaths; };
+	public ArrayList<File> getDestinationPaths(){ return destinationPaths; };
 	
 	@XmlElement
 	public Calendar getTiming(){ return timing; };
@@ -50,7 +50,7 @@ public abstract class Job {
 		this.sourceFile = sourceFile;
 	}
 
-	public void setDestinationPaths(ArrayList<String> destinationPaths) {
+	public void setDestinationPaths(ArrayList<File> destinationPaths) {
 		this.destinationPaths = destinationPaths;
 	}
 

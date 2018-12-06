@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -44,11 +45,11 @@ public class BackDatUp {
 	private final JFileChooser fileChooser = new JFileChooser();
 	
 	protected static File src;
-	protected static ArrayList<String> dest;
+	protected static ArrayList<File> dest;
 	protected static JTable jobsTable;
 	protected static DefaultTableModel jobsModel;
 	protected static int lastSelectedRow = -1;
-	protected static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy kk:mm", Locale.ENGLISH);
+	protected static SimpleDateFormat sdf = new SimpleDateFormat("M/d/y k:m", Locale.ENGLISH);
 
 	/**
 	 * Launch the application.
@@ -57,21 +58,6 @@ public class BackDatUp {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					
-					/* checks for due jobs periodically and performs them */
-					Runnable checkJobs = new Runnable() {
-					    public void run() {
-					    	//TODO: clear table
-					    	
-					        //System.out.println("Checking for due jobs...");
-					        Schedule.getInstance().checkForDueJobs();
-					        //System.out.println("Updating jobs table...");
-					        updateJobsTable();
-					    }
-					};
-					ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-					executor.scheduleAtFixedRate(checkJobs, 0, 3, TimeUnit.SECONDS);
-					
 					BackDatUp window = new BackDatUp();
 					window.BackDatUp.setTitle("Back Dat Up");
 					window.BackDatUp.setVisible(true);
@@ -103,6 +89,16 @@ public class BackDatUp {
 	 */
 	public BackDatUp() {
 		initialize();
+		
+		/* checks for due jobs periodically and performs them */
+		Runnable checkJobs = new Runnable() {
+		    public void run() {
+		        Schedule.getInstance().checkForDueJobs();
+		        updateJobsTable();
+		    }
+		};
+		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+		executor.scheduleAtFixedRate(checkJobs, 0, 5, TimeUnit.SECONDS);
 	}
 
 	/**
@@ -121,7 +117,7 @@ public class BackDatUp {
 		String[] columns = {"Source:",
 				"Destination:",
 				"Next Backup:",
-				"Backups Scheduled:"};
+				"Repeats Scheduled:"};
 		BackDatUp.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		jobsModel = new DefaultTableModel(columns, 0);
 		jobsTable = new JTable(jobsModel);
@@ -193,15 +189,16 @@ public class BackDatUp {
 	 *  - by editing a job
 	 *  - by job being executed
 	 */
-	public static void updateJobsTable() {
-//		Object a[] = new Object[4];
-//		a[0] = "C:\Sample.txt";
-//		a[1] = "C:\destination\";
-//		a[2] = "";
-//		a[3] = "wnfawinf";
-//		jobsModel.addRow(a);
-		
+	private static void updateJobsTable() {
+		System.out.println("Updating jobs table...");
 		jobsModel.setRowCount(0); // empties table
+		
+		Object a[] = new Object[4];
+		a[0] = "C:\\Sample.txt";
+		a[1] = "C:\\destination\\";
+		a[2] = "12/2/2032 1:50";
+		a[3] = "0";
+		jobsModel.addRow(a);
 		
 		Object rowData[] = new Object[4];
 		for(Job j : Schedule.getInstance().getJobs()) {
@@ -211,6 +208,7 @@ public class BackDatUp {
 			rowData[3] = j.getTimesToRepeat();
 			jobsModel.addRow(rowData);
 		}
+		System.out.println("Jobs table updated.");
 	}
 	
 	private void addJob(JButton parent) {
@@ -243,7 +241,7 @@ public class BackDatUp {
 		
 		JTextArea intervalText = new JTextArea("Interval (Minutes)");
 		JTextArea timesToRepeatText = new JTextArea("Times To Repeat");
-		JTextArea timingText = new JTextArea("MM/DD/YYYY HR:MN");
+		JTextArea timingText = new JTextArea(sdf.format(Calendar.getInstance().getTime()));
 		
 		sourceBrowse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -264,25 +262,35 @@ public class BackDatUp {
 				
 				fileChooser.showOpenDialog(destBrowse);
 				
-				dest = new ArrayList<String>();
+				dest = new ArrayList<File>();
 				String temp = fileChooser.getSelectedFile().getAbsolutePath() + "\\" + src.getName();
-				dest.add(temp);
-				destText.setText(temp.toString());
+				dest.add(new File(temp));
+				destText.setText(temp);
 			}
 		});
 		ok.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Job myJob = null;
+				Calendar timing = Calendar.getInstance();
 		
 				if(instantJobRadio.isSelected()){
-					myJob = new InstantJob(src, dest);
+					try {
+						String temp = timingText.getText();
+						Date date = sdf.parse(timingText.getText());
+						timing.setTime(date);
+					} catch (ParseException e1) {
+						e1.printStackTrace();
+					}
+					myJob = new InstantJob(src, dest, timing);
 					Schedule.getInstance().addJob(myJob);
 				} else if(recurringJobRadio.isSelected()){
-					Calendar timing = Calendar.getInstance();
 					int interval = 0;
 					int timesToRepeat = 0;
 					try {
-						timing.setTime(sdf.parse(timingText.getText()));
+						String temp = timingText.getText();
+						Date date = sdf.parse(timingText.getText());
+						timing.setTime(date);
+						
 						interval = Integer.parseInt(intervalText.getText());
 						timesToRepeat = Integer.parseInt(timesToRepeatText.getText());
 					} catch (ParseException e1) {
@@ -326,17 +334,18 @@ public class BackDatUp {
 	}
 	
 	private void deleteJob(JButton parent) {
-		String ObjButtons[] = {"Yes", "No"};
-		int result = JOptionPane.showOptionDialog(null, "Are you sure you want to delete the selected job?",
-				"Delete Confirmation", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
-		if(result == JOptionPane.YES_OPTION) {
-			String sourceToDelete = (String) jobsTable.getValueAt(lastSelectedRow, 0);
-			String destinationToDelete = (String) jobsTable.getValueAt(lastSelectedRow, 1);
+		int result = JOptionPane.showConfirmDialog(null, "Do you want to delete this job's existing backups too?",
+				"Delete Confirmation", JOptionPane.YES_NO_CANCEL_OPTION);
+		boolean deleteBackupsToo = false;
+		if(result == JOptionPane.YES_OPTION)
+			deleteBackupsToo = true;
+		if(result == JOptionPane.YES_OPTION || result == JOptionPane.NO_OPTION){
+			// File sourceToDelete = new File((String) jobsTable.getValueAt(lastSelectedRow, 0));
+			File destinationToDelete = new File((String) jobsTable.getValueAt(lastSelectedRow, 1));
 			jobsModel.removeRow(lastSelectedRow);
-			for(Job j : Schedule.getInstance().getJobs()) {
-				if(j.sourceFile.equals(sourceToDelete)
-						&& j.destinationPaths.get(0).equals(destinationToDelete)) {
-					Schedule.getInstance().deleteJob(j.sourceFile);
+			for(Job j : Schedule.getInstance().getJobs()){
+				if(j.destinationPaths.contains(destinationToDelete)){
+					Schedule.getInstance().deleteJob(j.destinationPaths.get(0), deleteBackupsToo);
 				}
 			}
 		}
@@ -353,8 +362,6 @@ public class BackDatUp {
 		frame.setLocationRelativeTo(parent);
 		frame.pack();
 		frame.setVisible(true);
-		
-		//selectedRow = jobsTable.getSelectedRow();
 		
 		for(Job j : Schedule.getInstance().getJobs()) {
 			if(j.sourceFile.equals(jobsTable.getValueAt(lastSelectedRow, 0))
