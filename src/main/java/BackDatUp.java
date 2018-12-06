@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
@@ -91,6 +93,7 @@ public class BackDatUp {
 	 */
 	protected void initialize() {
 		BackDatUp = new JFrame();
+		BackDatUp.setFocusable(true);
 		BackDatUp.setBounds(100, 100, 633, 718);
 		BackDatUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -125,25 +128,62 @@ public class BackDatUp {
 		/*
 		 * Button behavior 
 		 */
+		BackDatUp.addKeyListener( new KeyListener() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("key was pressed");
+				if(e.getKeyChar() == 'a')
+				{
+					addJob(btnScheduleJob);
+					BackDatUp.requestFocus();
+					System.out.println("a was pressed");
+				}
+				else if(e.getKeyChar() == 'd')
+				{
+					deleteJob(btnDeleteJob);
+					BackDatUp.requestFocus();
+					System.out.println("d was pressed");
+				}
+				else if(e.getKeyChar() == 'e')
+				{
+					editJob(btnEditJob);
+					BackDatUp.requestFocus();
+					System.out.println("e was pressed");
+				}
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+		});
 		btnScheduleJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addJob(btnScheduleJob);
+				BackDatUp.requestFocus();
 			}
 		});
 		btnDeleteJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				deleteJob(btnDeleteJob);
+				BackDatUp.requestFocus();
 			}
 		});
 		btnEditJob.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				editJob(btnEditJob);
+				BackDatUp.requestFocus();
 			}
 		});
 		jobsTable.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				lastSelectedRow = jobsTable.getSelectedRow();
+				BackDatUp.requestFocus();
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {}
@@ -326,4 +366,3 @@ public class BackDatUp {
 		}
 	}
 }
-
