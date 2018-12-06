@@ -80,7 +80,7 @@ public class RecurringJob extends Job {
 
 
 	@Override
-	public void deleteJobAndBackups() {
+	public void deleteBackups() {
 		FileOperations f = FileOperations.getInstance();
 		for(String d : destinationPaths){
 			f.deleteFile(d);

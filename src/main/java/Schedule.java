@@ -21,7 +21,7 @@ public class Schedule {
 	
 	Schedule(){
 		jobs = new JobsList(true);
-		// change to true to enable XML loading
+		// change to false to disable XML loading
 	}
 
 	/**
@@ -29,11 +29,18 @@ public class Schedule {
 	 */
 	public void checkForDueJobs(){
 		for(Job j : jobs){
+			if(j.getTimesToRepeat() < 0)
+				jobs.remove(j);
 			if(j.getTiming().before(Calendar.getInstance())){
+				System.out.println("Performing job: " + j.toString());
 				j.performJob();
+				if(j.getTimesToRepeat() == 0){
+					jobs.remove(j);
+					System.out.println("Removing expired job: " + j.toString());
+				}
+					
 			}
 		}
-		BackDatUp.updateJobsTable();
 	}
 	
 	/**
@@ -41,9 +48,9 @@ public class Schedule {
 	 * @param Job
 	 * @return false if job doesn't exist, true if it was deleted
 	 */
-	public boolean deleteJob(Job job, boolean deleteBackupsToo){
+	public boolean deleteJob(Job job, boolean deleteBackupsToo){	// TODO have GUI ask if you wanna delete backups too with Yes/no/cancel options
 		if(deleteBackupsToo)
-			job.deleteJobAndBackups();
+			job.deleteBackups();
 		return jobs.remove(job);
 	}
 	
@@ -60,10 +67,6 @@ public class Schedule {
 			}
 		}
 		return false;
-	}
-	
-	public boolean deleteJob(String sourceFile){
-		return deleteJob(new File(sourceFile));
 	}
 	
 	/**

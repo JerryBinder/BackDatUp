@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -115,7 +114,7 @@ public class JobsList extends ArrayList<Job> {
 			e.printStackTrace();
 		}
 		
-		StringReader reader = new StringReader(fileContent.toString());
+		// StringReader reader = new StringReader(fileContent.toString());
 		
 		try {
 			JAXBContext context = JAXBContext.newInstance(JobsList.class);

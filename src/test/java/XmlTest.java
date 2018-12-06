@@ -1,13 +1,13 @@
 package test.java;
 
-import static org.junit.Assert.assertFalse;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import main.java.InstantJob;
 import main.java.JobsList;
 import main.java.RecurringJob;
@@ -34,6 +34,7 @@ public class XmlTest {
 	public void setup(){
 		jobs = new JobsList();
 		timing = Calendar.getInstance();
+		destinations = new ArrayList<String>();
 	}
 	
 	@Test
@@ -52,6 +53,9 @@ public class XmlTest {
 		jobs.add(new RecurringJob(new File(TEST_FILE_2), destinations, timing, 1, 5));
 	}
 	
+	/*
+	 * This is proving very difficult to unit test - easier to test through program UI.
+	 */
 //	@Test
 //	public void testLoadFromXml(){
 //		if (!(new File(SERIALIZATION_PATH).exists())){
@@ -60,4 +64,11 @@ public class XmlTest {
 //		JobsList jl = JobsList.loadFromXml();
 //		assertFalse(jl.isEmpty());
 //	}
+	
+	@After
+	public void cleanup(){
+		new File(SERIALIZATION_PATH).delete();
+	}
+	
+
 }
