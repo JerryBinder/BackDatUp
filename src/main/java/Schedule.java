@@ -2,7 +2,6 @@ package main.java;
 
 import java.io.File;
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * @author Jerry Binder
@@ -34,6 +33,7 @@ public class Schedule {
 				j.performJob();
 			}
 		}
+		BackDatUp.updateJobsTable();
 	}
 	
 	/**
@@ -70,11 +70,11 @@ public class Schedule {
 	 * Adds a job to the schedule.
 	 * @param Job
 	 */
-	public void addJob(Job job){
-		jobs.add(job);
+	public boolean addJob(Job job){
+		return jobs.add(job);
 	}
 	
-	public List<Job> getJobs(){
+	public JobsList getJobs(){
 		return jobs;
 	}
 }

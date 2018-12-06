@@ -55,9 +55,9 @@ public class XmlTest {
 	
 	@Test
 	public void testLoadFromXml(){
-//		if (!(new File(SERIALIZATION_PATH).exists())){
-//			testSaveToXml();
-//		}
+		if (!(new File(SERIALIZATION_PATH).exists())){
+			testSaveToXml();
+		}
 		boolean a = false, b = false, c = false, d = false;
 		JobsList jl = JobsList.loadFromXml();
 		for(Job j : jl){
@@ -70,6 +70,6 @@ public class XmlTest {
 			if(j.getDestinationPaths().contains(DEST_4))
 				d = true;
 		}
-		assertTrue(a && b && c && d);
+		assertTrue((a && b && c && d));
 	}
 }

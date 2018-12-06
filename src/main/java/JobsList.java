@@ -103,7 +103,7 @@ public class JobsList extends ArrayList<Job> {
 		System.out.println("path doesn't exist, continuing");
 		
 		FileReader fr = null;
-		char[] buffer = new char[1024];
+		char[] buffer = new char[1];
 		StringBuffer fileContent = new StringBuffer();
 		try {
 			fr = new FileReader(SERIALIZATION_PATH);
