@@ -96,11 +96,9 @@ public class JobsList extends ArrayList<Job> {
 	 */
 	public static JobsList loadFromXml() {
 		// if XML file doesn't exist, JobsList class returns its empty self
-		System.out.println("starting load");
 		if(!(new File(SERIALIZATION_PATH).exists())){
 			return new JobsList(false);
 		}
-		System.out.println("path doesn't exist, continuing");
 		
 		FileReader fr = null;
 		char[] buffer = new char[1];
