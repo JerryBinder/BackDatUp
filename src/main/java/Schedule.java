@@ -28,19 +28,20 @@ public class Schedule {
 	 * Iterates through list of jobs. Calls performJob() on all that are due.
 	 */
 	public void checkForDueJobs(){
+		System.out.println("Checking for due jobs...");
 		for(Job j : jobs){
-			if(j.getTimesToRepeat() < 0)
-				jobs.remove(j);
 			if(j.getTiming().before(Calendar.getInstance())){
 				System.out.println("Performing job: " + j.toString());
 				j.performJob();
-				if(j.getTimesToRepeat() == 0){
+				if(j.getTimesToRepeat() <= 0){
 					jobs.remove(j);
-					System.out.println("Removing expired job: " + j.toString());
-				}
-					
+					jobs.serializeInXml();
+					System.out.println("Removing expired job: " + j.destinationPaths.get(0).toString() + "\n" + j.getTiming());
+				}	
 			}
 		}
+		jobs.serializeInXml();
+		System.out.println("Done checking for due jobs.");
 	}
 	
 	/**
@@ -48,7 +49,7 @@ public class Schedule {
 	 * @param Job
 	 * @return false if job doesn't exist, true if it was deleted
 	 */
-	public boolean deleteJob(Job job, boolean deleteBackupsToo){	// TODO have GUI ask if you wanna delete backups too with Yes/no/cancel options
+	public boolean deleteJob(Job job, boolean deleteBackupsToo){
 		if(deleteBackupsToo)
 			job.deleteBackups();
 		return jobs.remove(job);
@@ -59,12 +60,12 @@ public class Schedule {
 	 * @param sourceFile
 	 * @return false if job doesn't exist, true if it was deleted
 	 */
-	public boolean deleteJob(File sourceFile){
+	public boolean deleteJob(File destinationFile, boolean deleteBackupsToo){
 		for(Job j : jobs){
-			if(j.getSourceFile() == sourceFile){
-				jobs.remove(j);
-				return true;
-			}
+			for(File path : j.getDestinationPaths())
+				if(path == destinationFile){
+					return deleteJob(j, deleteBackupsToo);
+				}
 		}
 		return false;
 	}

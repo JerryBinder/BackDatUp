@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jobsList>
+    <Job xsi:type="recurringJob" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <destinationPaths>D:\Users\jarre\Desktop\abc.txt</destinationPaths>
+        <sourceFile>D:\Users\jarre\Documents\abc.txt</sourceFile>
+        <timing>2018-12-06T04:05:10.615-06:00</timing>
+        <interval>1</interval>
+        <timesToRepeat>3</timesToRepeat>
+    </Job>
+</jobsList>

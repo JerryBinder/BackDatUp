@@ -19,36 +19,30 @@ public class RecurringJob extends Job {
 	// exists to make XML loader happy - don't call it
 	RecurringJob(){}
 	
-	public RecurringJob(File sourceFile, ArrayList<String> destinationPaths, Calendar timing, int interval, int timesToRepeat){
+	public RecurringJob(File sourceFile, ArrayList<File> destinationPaths, Calendar timing, int interval, int timesToRepeat){
 		super(sourceFile, destinationPaths, timing);
 		this.interval = interval;
 		this.timesToRepeat = timesToRepeat;
 	}
 	
-	public RecurringJob(File sourceFile, ArrayList<String> destinationPaths, int interval, int timesToRepeat){
+	public RecurringJob(File sourceFile, ArrayList<File> destinationPaths, int interval, int timesToRepeat){
 		this(sourceFile, destinationPaths, Calendar.getInstance(), interval, timesToRepeat);
 	}
 
 	@Override
 	public boolean performJob() {
-		File f;
 		FileOperations fileOperations = FileOperations.getInstance();
-		for(String path : destinationPaths)
+		for(File path : destinationPaths)
 		{
-			f = new File(path);
-			if(f.exists() == false)
-			{
-				fileOperations.createFolder(path);
-			}
 			fileOperations.copyFile(sourceFile, path);
 		}
 		
 		// decrements timesToRepeat. If it's still > 0, it'll reset the timing as well.
 		timesToRepeat--;
 		if(timesToRepeat > 0){
+			timing = Calendar.getInstance();
 			timing.add(Calendar.MINUTE, interval);
 		}
-		
 		return this.verifyCompletion();
 	}
 	
@@ -58,10 +52,10 @@ public class RecurringJob extends Job {
 		String destinationHash;
 		// List failedDestinations = new List();	// contains paths of all destinations that don't have the current file
 		
-		for(String d : destinationPaths){
-			destinationHash = hfu.generateMd5Hash(d);
+		for(File f : destinationPaths){
+			destinationHash = hfu.generateMd5Hash(f);
 			if(sourceHash != destinationHash){
-				// failedDestinations.add(d);
+				// failedDestinations.add(f);
 				return false;
 			}
 		}
@@ -69,12 +63,12 @@ public class RecurringJob extends Job {
 	}
 
 	@Override
-	public void addDestination(String destination) {
+	public void addDestination(File destination) {
 		destinationPaths.add(destination);
 	}
 
 	@Override
-	public void removeDestination(String destination) {
+	public void removeDestination(File destination) {
 		destinationPaths.remove(destinationPaths.indexOf(destination));
 	}
 
@@ -82,7 +76,7 @@ public class RecurringJob extends Job {
 	@Override
 	public void deleteBackups() {
 		FileOperations f = FileOperations.getInstance();
-		for(String d : destinationPaths){
+		for(File d : destinationPaths){
 			f.deleteFile(d);
 		}
 	}

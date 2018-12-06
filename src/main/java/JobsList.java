@@ -62,8 +62,8 @@ public class JobsList extends ArrayList<Job> {
 	 * Serializes the current JobsList in an XML file.
 	 * Called by addJob and removeJob.
 	 */
-	private void serializeInXml(){
-		
+	public void serializeInXml(){
+		System.out.println("Serializing in XML");
 		// deletes old file (if it exists) to make sure removed jobs don't sneak back in
 		File temp = new File(SERIALIZATION_PATH);
 		if(temp.exists())
@@ -94,6 +94,7 @@ public class JobsList extends ArrayList<Job> {
 	 * @return Schedule
 	 */
 	public static JobsList loadFromXml() {
+		System.out.println("Deserializing from xml");
 		// if XML file doesn't exist, JobsList class returns its empty self
 		if(!(new File(SERIALIZATION_PATH).exists())){
 			return new JobsList(false);
