@@ -15,6 +15,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -54,6 +57,21 @@ public class BackDatUp {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					
+					/* checks for due jobs periodically and performs them */
+					Runnable checkJobs = new Runnable() {
+					    public void run() {
+					    	//TODO: clear table
+					    	
+					        //System.out.println("Checking for due jobs...");
+					        Schedule.getInstance().checkForDueJobs();
+					        //System.out.println("Updating jobs table...");
+					        updateJobsTable();
+					    }
+					};
+					ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+					executor.scheduleAtFixedRate(checkJobs, 0, 3, TimeUnit.SECONDS);
+					
 					BackDatUp window = new BackDatUp();
 					window.BackDatUp.setTitle("Back Dat Up");
 					window.BackDatUp.setVisible(true);
