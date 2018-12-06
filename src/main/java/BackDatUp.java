@@ -45,6 +45,7 @@ public class BackDatUp {
 	protected static JTable jobsTable;
 	protected static DefaultTableModel jobsModel;
 	protected static int lastSelectedRow = -1;
+	protected static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy kk:mm", Locale.ENGLISH);
 
 	/**
 	 * Launch the application.
@@ -176,20 +177,19 @@ public class BackDatUp {
 	 */
 	public static void updateJobsTable() {
 //		Object a[] = new Object[4];
-//		a[0] = "213123";
-//		a[1] = "@31";
-//		a[2] = "24125125";
+//		a[0] = "C:\Sample.txt";
+//		a[1] = "C:\destination\";
+//		a[2] = "";
 //		a[3] = "wnfawinf";
 //		jobsModel.addRow(a);
 		
 		jobsModel.setRowCount(0); // empties table
-		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:ss:mm");
 		
 		Object rowData[] = new Object[4];
 		for(Job j : Schedule.getInstance().getJobs()) {
 			rowData[0] = j.getSourceFile().toString();
 			rowData[1] = j.getDestinationPaths().get(0).toString();
-			rowData[2] = format.format(j.getTiming().getTime());
+			rowData[2] = sdf.format(j.getTiming().getTime());
 			rowData[3] = j.getTimesToRepeat();
 			jobsModel.addRow(rowData);
 		}
@@ -255,8 +255,6 @@ public class BackDatUp {
 		ok.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Job myJob = null;
-				// parse Calendar object
-				SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy kk:mm", Locale.ENGLISH);
 		
 				if(instantJobRadio.isSelected()){
 					myJob = new InstantJob(src, dest);
@@ -309,17 +307,18 @@ public class BackDatUp {
 		frame.setVisible(true);
 	}
 	
-	// TODO test this
 	private void deleteJob(JButton parent) {
 		String ObjButtons[] = {"Yes", "No"};
 		int result = JOptionPane.showOptionDialog(null, "Are you sure you want to delete the selected job?",
 				"Delete Confirmation", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons, ObjButtons[1]);
 		if(result == JOptionPane.YES_OPTION) {
+			String sourceToDelete = (String) jobsTable.getValueAt(lastSelectedRow, 0);
+			String destinationToDelete = (String) jobsTable.getValueAt(lastSelectedRow, 1);
+			jobsModel.removeRow(lastSelectedRow);
 			for(Job j : Schedule.getInstance().getJobs()) {
-				if(j.sourceFile.equals(jobsTable.getValueAt(lastSelectedRow, 0))
-						&& j.destinationPaths.get(0).equals(jobsTable.getValueAt(lastSelectedRow, 1))) {
+				if(j.sourceFile.equals(sourceToDelete)
+						&& j.destinationPaths.get(0).equals(destinationToDelete)) {
 					Schedule.getInstance().deleteJob(j.sourceFile);
-					jobsModel.removeRow(lastSelectedRow);
 				}
 			}
 		}
