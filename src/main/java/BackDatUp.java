@@ -10,8 +10,10 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
 
 import javax.swing.BoxLayout;
@@ -253,17 +255,25 @@ public class BackDatUp {
 		ok.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Job myJob = null;
-				
 				// parse Calendar object
-				SimpleDateFormat sdf = new SimpleDateFormat("MM/DD HR:MN", Locale.ENGLISH));	// TODO
-				
-				if(instantJobRadio.isSelected()) {
+				SimpleDateFormat sdf = new SimpleDateFormat("MM/DD HR:MN", Locale.ENGLISH);	// TODO
+		
+				if(instantJobRadio.isSelected()){
 					myJob = new InstantJob(src, dest);
 					Schedule.getInstance().addJob(myJob);
-				} else if(recurringJobRadio.isSelected()) {
-					// TODO
-					// myJob = new RecurringJob(src, dest, timing, interval, timesToRepeat);
-					// Schedule.getInstance().addJob(myJob);
+				} else if(recurringJobRadio.isSelected()){
+					Calendar timing = Calendar.getInstance();
+					int interval = 0;
+					int timesToRepeat = 0;
+					try {
+						timing.setTime(sdf.parse(timingText.getText()));
+						interval = Integer.parseInt(intervalText.getText());
+						timesToRepeat = Integer.parseInt(timesToRepeatText.getText());
+					} catch (ParseException e1) {
+						e1.printStackTrace();
+					}
+					myJob = new RecurringJob(src, dest, timing, interval, timesToRepeat);
+					Schedule.getInstance().addJob(myJob);
 				}
 				src = null;
 				dest = null;
