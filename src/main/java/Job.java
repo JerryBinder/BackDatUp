@@ -59,5 +59,7 @@ public abstract class Job {
 	}
 
 	public abstract void deleteJobAndBackups();
+
+	public int getTimesToRepeat() { return 0; }
 }
 

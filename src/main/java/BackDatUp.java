@@ -45,10 +45,6 @@ public class BackDatUp {
 	protected static JTable jobsTable;
 	protected static DefaultTableModel jobsModel;
 	protected static int lastSelectedRow = -1;
-	protected static String[] columns = {"Source:",
-										"Destination:",
-										"Next Backup:",
-										"Repetitions:"};
 
 	/**
 	 * Launch the application.
@@ -103,6 +99,10 @@ public class BackDatUp {
 		 */
 		tableData = new Object[][] {};
 		
+		String[] columns = {"Source:",
+				"Destination:",
+				"Next Backup:",
+				"Backups Scheduled:"};
 		BackDatUp.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		jobsModel = new DefaultTableModel(columns, 0);
 		jobsTable = new JTable(jobsModel);
@@ -190,7 +190,7 @@ public class BackDatUp {
 			rowData[0] = j.getSourceFile().toString();
 			rowData[1] = j.getDestinationPaths().get(0).toString();
 			rowData[2] = format.format(j.getTiming().getTime());
-			rowData[3] = "";
+			rowData[3] = j.getTimesToRepeat();
 			jobsModel.addRow(rowData);
 		}
 	}
@@ -225,7 +225,7 @@ public class BackDatUp {
 		
 		JTextArea intervalText = new JTextArea("Interval (Minutes)");
 		JTextArea timesToRepeatText = new JTextArea("Times To Repeat");
-		JTextArea timingText = new JTextArea("MM/DD HR:MN");	// TODO 
+		JTextArea timingText = new JTextArea("MM/DD/YYYY HR:MN");
 		
 		sourceBrowse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -256,7 +256,7 @@ public class BackDatUp {
 			public void actionPerformed(ActionEvent e) {
 				Job myJob = null;
 				// parse Calendar object
-				SimpleDateFormat sdf = new SimpleDateFormat("MM/DD HR:MN", Locale.ENGLISH);	// TODO
+				SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy kk:mm", Locale.ENGLISH);
 		
 				if(instantJobRadio.isSelected()){
 					myJob = new InstantJob(src, dest);

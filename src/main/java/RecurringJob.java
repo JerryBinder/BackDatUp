@@ -91,6 +91,7 @@ public class RecurringJob extends Job {
 	public int getInterval() { return interval; }
 	
 	@XmlElement
+	@Override
 	public int getTimesToRepeat() { return timesToRepeat; }
 
 	public void setInterval(int interval) {
