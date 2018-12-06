@@ -20,8 +20,8 @@ public class Schedule {
 	}
 	
 	Schedule(){
-		jobs = new JobsList(false);
-		// TODO change to true to enable XML loading
+		jobs = new JobsList(true);
+		// change to true to enable XML loading
 	}
 
 	/**

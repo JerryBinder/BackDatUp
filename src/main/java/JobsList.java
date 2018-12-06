@@ -120,7 +120,7 @@ public class JobsList extends ArrayList<Job> {
 		try {
 			JAXBContext context = JAXBContext.newInstance(JobsList.class);
 			Unmarshaller un = context.createUnmarshaller();
-			return (JobsList)un.unmarshal(new File(SERIALIZATION_PATH));	// TODO fix nullpointerexception here, probably not reading it correctly
+			return (JobsList)un.unmarshal(new File(SERIALIZATION_PATH));
 		} catch (JAXBException e) {
 			e.printStackTrace();
 			return null;
