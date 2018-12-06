@@ -228,7 +228,7 @@ public class BackDatUp {
 	 *  - by editing a job
 	 *  - by job being executed
 	 */
-	private static void updateJobsTable() {
+	protected void updateJobsTable() {
 		System.out.println("Updating jobs table...");
 		jobsModel.setRowCount(0); // empties table
 		
@@ -314,7 +314,6 @@ public class BackDatUp {
 		
 				if(instantJobRadio.isSelected()){
 					try {
-						String temp = timingText.getText();
 						Date date = sdf.parse(timingText.getText());
 						timing.setTime(date);
 					} catch (ParseException e1) {
@@ -326,7 +325,6 @@ public class BackDatUp {
 					int interval = 0;
 					int timesToRepeat = 0;
 					try {
-						String temp = timingText.getText();
 						Date date = sdf.parse(timingText.getText());
 						timing.setTime(date);
 						

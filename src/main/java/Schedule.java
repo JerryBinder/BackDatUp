@@ -36,7 +36,7 @@ public class Schedule {
 				if(j.getTimesToRepeat() <= 0){
 					jobs.remove(j);
 					jobs.serializeInXml();
-					System.out.println("Removing expired job: " + j.destinationPaths.get(0).toString() + "\n" + j.getTiming());
+					System.out.println("Removing expired job: " + j.destinationPaths.get(0).toString() + "\n" + j.getTiming().getTime().toString());
 				}	
 			}
 		}
