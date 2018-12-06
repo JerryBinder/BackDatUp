@@ -11,6 +11,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -52,7 +55,19 @@ public class BackDatUp {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
+				try {		
+					/* checks for due jobs periodically and performs them */
+					Runnable checkJobs = new Runnable() {
+					    public void run() {
+					        //System.out.println("Checking for due jobs...");
+					        Schedule.getInstance().checkForDueJobs();
+					        //System.out.println("Updating jobs table...");
+					        updateJobsTable();
+					    }
+					};
+					ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+					executor.scheduleAtFixedRate(checkJobs, 0, 3, TimeUnit.SECONDS);
+				
 					BackDatUp window = new BackDatUp();
 					window.BackDatUp.setTitle("Back Dat Up");
 					window.BackDatUp.setVisible(true);
@@ -105,8 +120,7 @@ public class BackDatUp {
 		jobsTable.setFillsViewportHeight(true);
 		BackDatUp.getContentPane().add(new JScrollPane(jobsTable));
 		
-		updateJobsTable();
-		// TODO: periodically call updateJobsTable()
+		updateJobsTable();		
 		
 		/*
 		 * Button creation
